@@ -5,7 +5,9 @@ package pl.edu.pw.elka.pap.z16.almostjira.controllers;
 // login
 // mail
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.Hashtable;
 @RestController("/users")
 public class Users {
     public ArrayList<Hashtable<String, String>> users_data = new ArrayList<Hashtable<String, String>>();
-    @GetMapping("/add_user")
+    @PutMapping("/add_user")
     void add_user(String user_id, String login, String mail){
         Hashtable<String, String> user_to_add = new Hashtable<>();
         user_to_add.put("user_id", user_id);
@@ -41,7 +43,7 @@ public class Users {
         }
         return null;
     }
-    @GetMapping("/change_user_login")
+    @PutMapping("/change_user_login")
     void change_user_login(String user_id, String new_login){
         for (final Hashtable<String, String> user: users_data) {
             if (user.get("user_id") == user_id){
@@ -49,7 +51,7 @@ public class Users {
             }
         }
     }
-    @GetMapping("/change_user_email")
+    @PutMapping("/change_user_email")
     void change_user_mail(String user_id, String new_mail){
         for (final Hashtable<String, String> user: users_data) {
             if (user.get("user_id") == user_id){
@@ -57,7 +59,7 @@ public class Users {
             }
         }
     }
-    @GetMapping("/remove_user")
+    @DeleteMapping("/remove_user")
     void remove_user(String user_id){
         users_data.removeIf(user -> user.get("user_id") == user_id);
     }
