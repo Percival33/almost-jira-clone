@@ -22,7 +22,7 @@ W ramach projektu z przedmiotu Programowanie Aplikacyjne planujemy stworzyć apl
 ### Opis rozwiązania:
 Wybrana technologia: Java Spring
 
-[dokumentacja API]
+[dokumentacja API] (dostępna gdy aplikacja jest uruchomiona)
 
 
 [//]: # (link)
