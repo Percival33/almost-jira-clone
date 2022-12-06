@@ -15,7 +15,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/users")
-public class Users {
+public class UsersController {
     private int user_id = 0;
     private final ArrayList<Hashtable<String, String>> users_data = new ArrayList<>();
     @GetMapping("{user_id}")
