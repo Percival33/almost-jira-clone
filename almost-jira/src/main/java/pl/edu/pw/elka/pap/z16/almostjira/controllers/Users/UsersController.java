@@ -43,7 +43,7 @@ public class UsersController {
                 return new ResponseEntity<>(String.valueOf(user), HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>("No such user exist!", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No such user!", HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("delete_user_with_id")
@@ -54,7 +54,7 @@ public class UsersController {
                 return new ResponseEntity<>("User deleted!", HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>("No such user exist!", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No such user!", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("get_user_with_id")

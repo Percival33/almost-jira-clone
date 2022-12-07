@@ -28,7 +28,7 @@ public class ProjectsController {
         project_to_add.put("project_id", String.valueOf(this.project_id));
         project_to_add.put("project_name", requestBody.project_name);
         project_to_add.put("tasks", requestBody.project_tasks);
-        project_to_add.put("overseer", requestBody.overseer_id);
+        project_to_add.put("overseer_id", requestBody.overseer_id);
 
         projects_data.add(project_to_add);
         this.project_id++;
@@ -47,12 +47,12 @@ public class ProjectsController {
         return new ResponseEntity<>("No such project!", HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("{user_id}")
-    public ResponseEntity<String> remove_user(@PathVariable("user_id") int user_id){
-        for (final Hashtable<String, String> user: users_data) {
-            if (Objects.equals(user.get("user_id"), String.valueOf(user_id))){
-                users_data.remove(user);
-                return new ResponseEntity<>("User deleted!", HttpStatus.OK);
+    @DeleteMapping("delete_project_with_id")
+    public ResponseEntity<String> remove_project(@PathVariable("project_id") int project_id){
+        for (final Hashtable<String, Object> project: projects_data) {
+            if (Objects.equals(project.get("project_id"), String.valueOf(project_id))){
+                projects_data.remove(project);
+                return new ResponseEntity<>("Project deleted!", HttpStatus.OK);
             }
         }
         return new ResponseEntity<>("No such project!", HttpStatus.NOT_FOUND);
