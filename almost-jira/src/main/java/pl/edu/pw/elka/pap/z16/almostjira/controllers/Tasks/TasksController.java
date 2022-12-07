@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pap.z16.almostjira.controllers;
+package pl.edu.pw.elka.pap.z16.almostjira.controllers.Tasks;
 
 
 // lista słownikow reprezentujacych pojedynczy projeky
@@ -7,5 +7,5 @@ package pl.edu.pw.elka.pap.z16.almostjira.controllers;
 // metoda zeby zmienic projekt o danym id
 // metoda zeby usunac projekt  o danym id
 
-public class Tasks {
+public class TasksController {
 }
