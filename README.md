@@ -23,7 +23,8 @@ W ramach projektu z przedmiotu Programowanie Aplikacyjne planujemy stworzyć apl
 Wybrana technologia: Java Spring
 
 [dokumentacja API] (dostępna gdy aplikacja jest uruchomiona)
-
+![swagger]
 
 [//]: # (link)
 [dokumentacja API]: http://localhost:8080/swagger-ui/index.html
+[swagger]: img/swagger.png
