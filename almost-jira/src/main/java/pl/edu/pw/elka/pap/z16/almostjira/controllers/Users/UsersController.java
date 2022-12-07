@@ -34,7 +34,7 @@ public class UsersController {
         return new ResponseEntity<>(String.valueOf(user_to_add), HttpStatus.CREATED);
     }
 
-    @PutMapping("change_username_of_user_with_id}")
+    @PutMapping("change_username_of_user_with_id")
     public ResponseEntity<String> change_username(@PathVariable("user_id") int user_id, @RequestParam String new_username){
 
         for (final Hashtable<String, String> user: users_data) {
