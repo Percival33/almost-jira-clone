@@ -5,6 +5,8 @@ package pl.edu.pw.elka.pap.z16.almostjira.controllers.Users;
 // username
 // haslo
 
+//!!!TODO ADD CLASS USER
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +31,7 @@ public class UsersController {
     }
 
     @GetMapping
-    public ResponseEntity<String> get_user_by_id(){
+    public ResponseEntity<String> get_users(){
         return new ResponseEntity<>(String.valueOf(this.users_data), HttpStatus.OK);
     }
 
