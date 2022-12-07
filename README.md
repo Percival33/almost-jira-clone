@@ -21,9 +21,17 @@ W ramach projektu z przedmiotu Programowanie Aplikacyjne planujemy stworzyć apl
 
 ### Opis rozwiązania:
 Wybrana technologia: Java Spring
+Dostępna po uruchomieniu programu [dokumentacja API]
 
-[dokumentacja API] (dostępna gdy aplikacja jest uruchomiona)
+### Aktualny poziom zaawansowania rozwiazania:
+W celu uruchomienia programu, konieczna jest jego kompilacja. Najpierw przy użyciu Gradle, a następnie za pomocą SpringBoot.
+./gradlew run
 
+Na ten moment zostały zaimplementowane funkcje, które w niedalekiej przyszłości posłużą do stworzenia funkcjonującej aplikacji.
+Projekt został również zintegrowany ze Swagger UI, który za sprawą naszych wysiłków umożliwia przetestowanie zaimplementowanych funkcji.
+Aktualna aplikacja prezentuje się następująco:
+
+![Current implementation](img/swagger.png)
 
 [//]: # (link)
 [dokumentacja API]: http://localhost:8080/swagger-ui/index.html
