@@ -25,5 +25,13 @@ Wybrana technologia: Java Spring
 [dokumentacja API] (dostępna gdy aplikacja jest uruchomiona)
 
 
+
+## Konteneryzacja
+
+```bash
+docker build -t my-spring-app .
+docker run -p 8080:8080 my-spring-app
+```
+
 [//]: # (link)
 [dokumentacja API]: http://localhost:8080/swagger-ui/index.html
