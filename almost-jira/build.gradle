@@ -39,25 +39,13 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
 }
 
-//project.configurations.implementation.setCanBeResolved(true)
-//dependencies {
-
-
 jar {
 	manifest {
 		attributes (
-//				'Main-Class': 'org.springframework.boot.SpringApplication',
-//				'Start-Class': 'pl.edu.pw.elka.pap.z16.almostjira.AlmostJiraApplication',
 				'Main-Class': 'pl.edu.pw.elka.pap.z16.almostjira.AlmostJiraApplication',
-//				'Class-Path': configurations.compile.files.collect { it.getName() }.join(' ')
 		)
 	}
-//	zip64 = true
-//	from {
-//		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-//	}
-//	dependsOn ('dependencies')
-//	enabled = false
+
 }
 
 tasks.named('test') {
