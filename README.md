@@ -33,5 +33,16 @@ Aktualna aplikacja prezentuje się następująco:
 
 ![Current implementation](img/swagger.png)
 
+
+## Konteneryzacja
+Żeby uruchomić aplikacje należy zbudować kontener i uruchomić go (proces uruchomienia może trwać kilka minut)
+```bash
+docker build -t my-spring-app .
+docker run -p 8080:8080 my-spring-app
+```
+
+
+[//]: # (/home/percival/.jdks/temurin-17.0.5/bin/java  -jar /home/percival/src/pap22z-z16/almost-jira/build/libs/almost-jira-0.0.1-SNAPSHOT-plain.jar)
+
 [//]: # (link)
 [dokumentacja API]: http://localhost:8080/swagger-ui/index.html
