@@ -35,7 +35,13 @@ Aktualna aplikacja prezentuje się następująco:
 
 
 ## Konteneryzacja
-Żeby uruchomić aplikacje należy zbudować kontener i uruchomić go (proces uruchomienia może trwać kilka minut)
+Do poprawnego działania aplikacji potrzebne jest połączenie z bazą danych.
+Aby takie połączenie zestawić należy uruchomić kontener z bazą danych mongodb
+```bash
+docker run -d --name almost-jira-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=okon2137 mongo
+```
+
+Żeby uruchomić aplikacje należy zbudować kontener i uruchomić go (proces uruchomienia może trwać nawet kilka minut)
 ```bash
 docker build -t my-spring-app .
 docker run -p 8080:8080 my-spring-app
