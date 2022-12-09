@@ -20,7 +20,7 @@ public class UsersController {
     private int user_id = 0;
     private final ArrayList<Hashtable<String, String>> users_data = new ArrayList<>();
 
-    @PostMapping("add_user")
+    @PostMapping()
     public ResponseEntity<String> add_user(@RequestBody LoginForm requestBody){
         Hashtable<String, String> user_to_add = new Hashtable<>();
 
@@ -34,7 +34,7 @@ public class UsersController {
         return new ResponseEntity<>(String.valueOf(user_to_add), HttpStatus.CREATED);
     }
 
-    @PutMapping("change_username_of_user_with_id")
+    @PutMapping("{user_id}")
     public ResponseEntity<String> change_username(@PathVariable("user_id") int user_id, @RequestParam String new_username){
 
         for (final Hashtable<String, String> user: users_data) {
@@ -46,7 +46,7 @@ public class UsersController {
         return new ResponseEntity<>("No such user!", HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("delete_user_with_id")
+    @DeleteMapping("{user_id}")
     public ResponseEntity<String> remove_user(@PathVariable("user_id") int user_id){
         for (final Hashtable<String, String> user: users_data) {
             if (Objects.equals(user.get("user_id"), String.valueOf(user_id))){
@@ -57,7 +57,7 @@ public class UsersController {
         return new ResponseEntity<>("No such user!", HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("get_user_with_id")
+    @GetMapping("{user_id}")
     public ResponseEntity<String> get_user_by_id(@PathVariable("user_id") int user_id){
         for (final Hashtable<String, String> user: users_data) {
             if (Objects.equals(user.get("user_id"), String.valueOf(user_id))){
@@ -67,6 +67,10 @@ public class UsersController {
         return new ResponseEntity<>("No such user!", HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/xd")
+    public ResponseEntity<String> xd(){
+        return new ResponseEntity<>("XD", HttpStatus.OK);
+    }
     @GetMapping
     public ResponseEntity<String> get_users() {
         return new ResponseEntity<>(String.valueOf(this.users_data), HttpStatus.OK);
