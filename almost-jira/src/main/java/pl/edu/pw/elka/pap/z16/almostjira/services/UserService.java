@@ -7,6 +7,7 @@ import pl.edu.pw.elka.pap.z16.almostjira.exceptions.ResourceNotFoundException;
 import pl.edu.pw.elka.pap.z16.almostjira.models.*;
 import pl.edu.pw.elka.pap.z16.almostjira.repositories.UserRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,9 +18,6 @@ public class UserService {
     UserRepository userRepository;
 
     public User getUserById(String id) {
-        System.out.println("dupa " +  id + ' ' + UUID.fromString(id));
-        System.out.println(UUID.fromString(id));
-        System.out.println(id);
         return userRepository.findById(id).orElseThrow((() ->
                 new ResourceNotFoundException("User", "id", id)));
     }
@@ -35,12 +33,15 @@ public class UserService {
     }
 
     public User createUser(UserForm u) {
-        String a = String.valueOf(UUID.randomUUID());
-        System.out.println("User created: " + a);
+        Date now = new Date();
+        // TODO: hash password
         return userRepository.save(
                 User.builder()
-                        .id(a)
-                        .username(u.getUsername())
+                        .id(String.valueOf(UUID.randomUUID()))
+                        .firstName(u.firstName())
+                        .lastName(u.lastName())
+                        .createdAt(now)
+                        .lastModified(now)
                         .build());
     }
 }

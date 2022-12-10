@@ -47,6 +47,10 @@ docker build -t my-spring-app .
 docker run -p 8080:8080 my-spring-app
 ```
 
+### TODO
+- [ ] dodać walidacje danych
+- [ ] usunąć pole hasło przy zwracaniu wyników
+- [ ] dodać zapisywanie hasło i projekty do bazy
 
 [//]: # (/home/percival/.jdks/temurin-17.0.5/bin/java  -jar /home/percival/src/pap22z-z16/almost-jira/build/libs/almost-jira-0.0.1-SNAPSHOT-plain.jar)
 
