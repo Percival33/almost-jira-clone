@@ -1,79 +1,56 @@
 package pl.edu.pw.elka.pap.z16.almostjira.controllers.Users;
 
-//1 uzytkownik:
-// user_id
-// username
-// haslo
+import java.util.List;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pw.elka.pap.z16.almostjira.models.User;
+import pl.edu.pw.elka.pap.z16.almostjira.models.UserForm;
+import pl.edu.pw.elka.pap.z16.almostjira.services.UserService;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/users")
 public class UsersController {
-    private int user_id = 0;
-    private final ArrayList<Hashtable<String, String>> users_data = new ArrayList<>();
+    @Autowired
+    UserService userService;
+
 
     @PostMapping()
-    public ResponseEntity<String> add_user(@RequestBody LoginForm requestBody){
-        Hashtable<String, String> user_to_add = new Hashtable<>();
-
-        // TODO: add data validation
-        user_to_add.put("user_id", String.valueOf(this.user_id));
-        user_to_add.put("username", requestBody.username);
-        user_to_add.put("password", requestBody.password);
-
-        users_data.add(user_to_add);
-        this.user_id++;
-        return new ResponseEntity<>(String.valueOf(user_to_add), HttpStatus.CREATED);
+    public ResponseEntity<User> createUser(@RequestBody UserForm newUser){
+        return new ResponseEntity<>(userService.createUser(newUser), HttpStatus.CREATED);
     }
 
-    @PutMapping("{user_id}")
-    public ResponseEntity<String> change_username(@PathVariable("user_id") int user_id, @RequestParam String new_username){
+//    @PutMapping("{id}")
+//    public ResponseEntity<String> changeUsername(@PathVariable("id") String user_id, @RequestParam String new_username){
+//
+////        for (final Hashtable<String, String> user: users_data) {
+////            if (Objects.equals(user.get("user_id"), String.valueOf(user_id))){
+////                user.replace("username", new_username);
+////                return new ResponseEntity<>(String.valueOf(user), HttpStatus.OK);
+////            }
+////        }
+////        return new ResponseEntity<>("No such user!", HttpStatus.NOT_FOUND);
+//        return null;
+//    }
 
-        for (final Hashtable<String, String> user: users_data) {
-            if (Objects.equals(user.get("user_id"), String.valueOf(user_id))){
-                user.replace("username", new_username);
-                return new ResponseEntity<>(String.valueOf(user), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>("No such user!", HttpStatus.NOT_FOUND);
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable("id") String user_id){
+        userService.deleteUser(user_id);
+
+        return new ResponseEntity<>("Employee deleted successfully!.", HttpStatus.OK);
     }
 
-    @DeleteMapping("{user_id}")
-    public ResponseEntity<String> remove_user(@PathVariable("user_id") int user_id){
-        for (final Hashtable<String, String> user: users_data) {
-            if (Objects.equals(user.get("user_id"), String.valueOf(user_id))){
-                users_data.remove(user);
-                return new ResponseEntity<>("User deleted!", HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>("No such user!", HttpStatus.NOT_FOUND);
+    @GetMapping("{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") String user_id){
+        return new ResponseEntity<>(userService.getUserById(user_id), HttpStatus.OK);
     }
 
-    @GetMapping("{user_id}")
-    public ResponseEntity<String> get_user_by_id(@PathVariable("user_id") int user_id){
-        for (final Hashtable<String, String> user: users_data) {
-            if (Objects.equals(user.get("user_id"), String.valueOf(user_id))){
-              return new ResponseEntity<>(String.valueOf(user), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>("No such user!", HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/xd")
-    public ResponseEntity<String> xd(){
-        return new ResponseEntity<>("XD", HttpStatus.OK);
-    }
     @GetMapping
-    public ResponseEntity<String> get_users() {
-        return new ResponseEntity<>(String.valueOf(this.users_data), HttpStatus.OK);
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
     // lista uzytkownikow
     // getery i setery dla uzytkownikow o danym loginie
