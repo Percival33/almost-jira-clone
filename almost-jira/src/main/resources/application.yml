@@ -1,7 +1,16 @@
-springdoc:
-  swagger-ui:
-    path: swagger-ui
+spring:
+#  profiles: dev
   data:
     mongodb:
-      uri: "mongodb://root:okon2137@localhost:27017/?authSource=admin&authMechanism=SCRAM-SHA-1"
+      uri: "mongodb://root:okon@localhost:27017/?authSource=admin&authMechanism=SCRAM-SHA-1"
       database: "db"
+  springdoc:
+    swagger-ui:
+      path: swagger-ui
+
+#---
+#spring:
+#  profiles: production
+#  data:
+#    mongodb:
+#      uri: ${PAP_MONGO_URI}

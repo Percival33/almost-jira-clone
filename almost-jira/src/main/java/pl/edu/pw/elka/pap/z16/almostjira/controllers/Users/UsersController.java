@@ -23,24 +23,16 @@ public class UsersController {
         return new ResponseEntity<>(userService.createUser(newUser), HttpStatus.CREATED);
     }
 
-//    @PutMapping("{id}")
-//    public ResponseEntity<String> changeUsername(@PathVariable("id") String user_id, @RequestParam String new_username){
-//
-////        for (final Hashtable<String, String> user: users_data) {
-////            if (Objects.equals(user.get("user_id"), String.valueOf(user_id))){
-////                user.replace("username", new_username);
-////                return new ResponseEntity<>(String.valueOf(user), HttpStatus.OK);
-////            }
-////        }
-////        return new ResponseEntity<>("No such user!", HttpStatus.NOT_FOUND);
-//        return null;
-//    }
+    @PutMapping("{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") String user_id, @RequestBody UserForm u){
+        return new ResponseEntity<User>(userService.updateUser(u, user_id), HttpStatus.OK);
+    }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") String user_id){
         userService.deleteUser(user_id);
 
-        return new ResponseEntity<>("Employee deleted successfully!.", HttpStatus.OK);
+        return new ResponseEntity<>("User deleted successfully!.", HttpStatus.OK);
     }
 
     @GetMapping("{id}")

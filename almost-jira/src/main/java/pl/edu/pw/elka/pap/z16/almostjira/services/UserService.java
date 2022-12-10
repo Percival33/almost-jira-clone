@@ -32,6 +32,21 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public User updateUser(UserForm u, String id) {
+        User existingUser = userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("User", "Id", id));
+
+        Date now = new Date();
+        User updatedUser = existingUser.toBuilder()
+                .firstName(u.firstName())
+                .lastName(u.lastName())
+                .password(u.password())
+                .lastModified(now)
+                .build();
+
+        return userRepository.save(updatedUser);
+    }
+
     public User createUser(UserForm u) {
         Date now = new Date();
         // TODO: hash password
@@ -40,6 +55,8 @@ public class UserService {
                         .id(String.valueOf(UUID.randomUUID()))
                         .firstName(u.firstName())
                         .lastName(u.lastName())
+                        .password(u.password())
+                        .projects(null)
                         .createdAt(now)
                         .lastModified(now)
                         .build());
