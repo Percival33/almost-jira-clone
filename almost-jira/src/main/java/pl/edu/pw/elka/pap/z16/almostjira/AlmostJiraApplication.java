@@ -10,5 +10,4 @@ public class AlmostJiraApplication {
 		SpringApplication.run(AlmostJiraApplication.class, args);
 	}
 
-
 }
