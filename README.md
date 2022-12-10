@@ -38,7 +38,7 @@ Aktualna aplikacja prezentuje się następująco:
 Do poprawnego działania aplikacji potrzebne jest połączenie z bazą danych.
 Aby takie połączenie zestawić należy uruchomić kontener z bazą danych mongodb
 ```bash
-docker run -d --name almost-jira-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=okon2137 mongo
+docker run -d --name almost-jira-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=okon mongo
 ```
 
 Żeby uruchomić aplikacje należy zbudować kontener i uruchomić go (proces uruchomienia może trwać nawet kilka minut)
