@@ -2,9 +2,8 @@ spring:
 #  profiles: dev
   data:
     mongodb:
-      uri: ${PAP_MONGO_URI}
-#      "mongodb://root:okon@localhost:27017/?authSource=admin&authMechanism=SCRAM-SHA-1}"
-      database: "db"
+      uri: ${PAP_MONGO_URI:mongodb://root:okon@localhost:27017/?authSource=admin&authMechanism=SCRAM-SHA-1}
+      database: "dev"
   springdoc:
     swagger-ui:
       path: swagger-ui
