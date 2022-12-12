@@ -29,8 +29,9 @@ dependencies {
 	testImplementation "org.testcontainers:mongodb" // no version specified
 	testImplementation "org.testcontainers:testcontainers"
 	testImplementation "org.testcontainers:spock:1.17.4"
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 
-	/********* UTILS *********/
+    /********* UTILS *********/
 
 	// lombok
 	compileOnly("org.projectlombok:lombok:1.18.24")
