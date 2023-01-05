@@ -4,8 +4,8 @@
     <ul>
       <li v-for="user in results" :key="user.id">
         <p>ID: {{ user.id }}</p>
-        <p>Name: {{ user.firstName }}</p>
-        <p>Email: {{ user.lastName }}</p>
+        <p>Imię: {{ user.firstName }}</p>
+        <p>Nazwisko: {{ user.lastName }}</p>
       </li>
     </ul>
   </div>
