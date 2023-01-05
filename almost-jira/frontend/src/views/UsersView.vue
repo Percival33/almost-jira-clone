@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <button @click="getUsers">Pokaz uzytkonikow</button>
+    <button @click="getUsers">Pokaż użytkowników</button>
     <ul>
       <li v-for="user in results" :key="user.id">
         <p>{{ user }}</p>
