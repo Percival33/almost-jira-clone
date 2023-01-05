@@ -1,7 +1,9 @@
 <template>
   <div class="users">
-    <button class="getUsersButton" @click="getUsers">Pokaż użytkowników</button>
-    <ul>
+    <button class="getUsersButton" @click="toggleUsers">
+      {{ showUsers ? "Ukryj użytkowników" : "Pokaż użytkowników" }}
+    </button>
+    <ul v-if="showUsers">
       <li v-for="user in results" :key="user.id">
         <p>ID: {{ user.id }}</p>
         <p>Imię: {{ user.firstName }}</p>
@@ -47,9 +49,16 @@ export default {
   data() {
     return {
       results: [],
+      showUsers: false,
     };
   },
   methods: {
+    toggleUsers() {
+      this.showUsers = !this.showUsers;
+      if (!this.results.length) {
+        this.getUsers();
+      }
+    },
     getUsers() {
       fetch(`${API}/users`)
         .then((response) => response.json())
