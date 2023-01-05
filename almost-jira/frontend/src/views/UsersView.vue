@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="users">
     <button class="getUsersButton" @click="getUsers">Pokaż użytkowników</button>
     <ul>
       <li v-for="user in results" :key="user.id">
