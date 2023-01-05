@@ -1,7 +1,9 @@
 <template>
-  <div class="projects">
-    <button class="getProjectsButton" @click="getProjects">Pokaż projekty</button>
-    <ul>
+  <div class="users">
+    <button class="getProjectsButton" @click="toggleProjects">
+      {{ showUsers ? "Ukryj projekty" : "Pokaż projekty" }}
+    </button>
+    <ul v-if="showUsers">
       <li v-for="project in results" :key="project.project_id">
         <p>{{ project }}</p>
       </li>
@@ -45,18 +47,25 @@ export default {
   data() {
     return {
       results: [],
+      showProjects: false,
     };
   },
   methods: {
+    toggleProjects() {
+      this.showProjects = !this.showProjects;
+      if (!this.results.length) {
+        this.getProjects();
+      }
+    },
     getProjects() {
       fetch(`${API}/projects`)
-          .then((response) => response.json())
-          .then((data) => {
-            this.results = data.data;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        .then((response) => response.json())
+        .then((data) => {
+          this.results = data.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
