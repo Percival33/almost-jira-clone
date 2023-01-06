@@ -8,7 +8,7 @@ import java.util.List;
 @Builder
 public record ProjectForm(
     @Getter
-    String overseer_id,
+    Integer overseer_id,
     @Getter
     String project_name,
     @Getter
