@@ -8,9 +8,9 @@ import java.util.List;
 @Builder
 public record ProjectForm(
     @Getter
-    Integer overseer_id,
+    String overseerId,
     @Getter
-    String project_name,
+    String projectName,
     @Getter
     List<String> tasks
     ) { }

@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pap.z16.almostjira.models;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,14 +14,18 @@ import java.util.List;
 @Document(collection = "projects")
 public record Project(
         @Id
-        String project_id,
+        String id,
+        @Setter
+        String overseerId,
         @CreatedDate
         Date createdAt,
         @LastModifiedDate
         Date lastModified,
 
         @Setter
-        String project_name,
+        String projectName,
         @Setter
         List<String> tasks
+
+
 ) { }
