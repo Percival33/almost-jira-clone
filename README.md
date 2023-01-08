@@ -9,7 +9,7 @@
 </ul>
 
 ### Treść zadania:
-W ramach projektu z przedmiotu Programowanie Aplikacyjne planujemy stworzyć aplikację umożliwiającą backtracking i zarządzanie projektami, podobną do programu Jira. Chcemy, aby program zawierał następujące funkcjonalności:
+W ramach projektu z przedmiotu Programowanie Aplikacyjne planujemy stworzyć aplikację umożliwiającą bugtracking i zarządzanie projektami, podobną do programu Jira. Chcemy, aby program zawierał następujące funkcjonalności:
 <ol>
     <li>Możliwość tworzenia kont użytkownika</li>
     <li>System logowania</li>
@@ -35,17 +35,31 @@ Aktualna aplikacja prezentuje się następująco:
 
 
 ## Konteneryzacja
-Do poprawnego działania aplikacji potrzebne jest połączenie z bazą danych.
-Aby takie połączenie zestawić należy uruchomić kontener z bazą danych mongodb
+Przed uruchomieniem aplikacji należy stworzyć plik `.env` w którym należy podmienić wartości zmiennych.
+```
+DB_USER=<user>
+DB_PASSWORD=<passwd>
+```
+Aby uruchomić aplikację należy wykorzystać `docker compose`. Uruchomiona aplikacja będzie działała pod portem `5000` [aplikacja]
+a dostęp do api będzie możliwy pod portem `8080`
 ```bash
-docker run -d --name almost-jira-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=okon mongo
+docker compose up
+```
+Do przebudowania od nowa potrzeba flag `--force-recreate` oraz `--build`
+
+Aby ją zatrzymać należy użyć polecenia
+```bash
+docker compose down --remove-orphans
 ```
 
-Żeby uruchomić aplikacje należy zbudować kontener i uruchomić go (proces uruchomienia może trwać nawet kilka minut)
-```bash
-docker build -t my-spring-app .
-docker run -p 8080:8080 my-spring-app
-```
+[//]: # (```bash)
+
+[//]: # (docker run -d --name almost-jira-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=okon mongo)
+
+[//]: # (```)
+
+## Baza danych
+Aplikacja wykorzystuje bazę danych mongodb, która jest hostowana a zewnetrznym serwisie `MongoDBCloud`
 
 ### TODO
 - [ ] dodać walidacje danych
@@ -56,3 +70,4 @@ docker run -p 8080:8080 my-spring-app
 
 [//]: # (link)
 [dokumentacja API]: http://localhost:8080/swagger-ui/index.html
+[aplikacja]: http://localhost:5000
