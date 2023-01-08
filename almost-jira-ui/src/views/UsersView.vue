@@ -23,6 +23,11 @@
       Data dodania: {{ single_user.createdAt }}<br />
       Data ostatniej edycji: {{ single_user.lastModified }}
     </p>
+    <ul v-if="single_user">
+      <li v-for="project in single_user.projects" :key="project.id">
+        <p>Nazwa projektu: project.projectName</p>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -105,7 +110,7 @@ export default {
           this.single_user = data.data;
         })
         .catch((error) => {
-          console.log(error);
+          console.log("siema siema", error);
         });
     },
   },
