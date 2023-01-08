@@ -12,14 +12,14 @@
     </ul>
   </div>
   <div class="single-user">
-    <input v-model="Id" type="text" placeholder="Podaj ID użytkownika" />
     <button class="getUserButton" @click="getUser(Id)">
       Pokaż użytkownika
     </button>
-    <p v-if="user">
-      ID: {{ user.id }}<br />
-      Imię: {{ user.firstName }}<br />
-      Nazwisko: {{ user.lastName }} /
+    <input v-model="Id" type="text" placeholder="Podaj ID użytkownika" />
+    <p v-if="single_user">
+      ID: {{ single_user.id }}<br />
+      Imię: {{ single_user.firstName }}<br />
+      Nazwisko: {{ single_user.lastName }}
     </p>
   </div>
 </template>
@@ -69,6 +69,7 @@ export default {
     return {
       results: [],
       showUsers: false,
+      single_user: false,
     };
   },
   methods: {
@@ -92,7 +93,7 @@ export default {
       fetch(`${API}/users/${Id}`)
         .then((response) => response.json())
         .then((data) => {
-          this.user = data.data;
+          this.single_user = data.data;
         })
         .catch((error) => {
           console.log(error);
