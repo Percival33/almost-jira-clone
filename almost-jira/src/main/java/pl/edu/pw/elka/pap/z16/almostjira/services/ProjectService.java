@@ -18,7 +18,7 @@ public class ProjectService {
 
     public Project getProjectById(String id) {
         return projectRepository.findById(id).orElseThrow((() ->
-                new ResourceNotFoundException("User", "id", id)));
+                new ResourceNotFoundException("Project", "id", id)));
     }
 
     public List<Project> getAllProjects() {

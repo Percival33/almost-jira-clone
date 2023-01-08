@@ -9,7 +9,7 @@
 </ul>
 
 ### Treść zadania:
-W ramach projektu z przedmiotu Programowanie Aplikacyjne planujemy stworzyć aplikację umożliwiającą backtracking i zarządzanie projektami, podobną do programu Jira. Chcemy, aby program zawierał następujące funkcjonalności:
+W ramach projektu z przedmiotu Programowanie Aplikacyjne planujemy stworzyć aplikację umożliwiającą bugtracking i zarządzanie projektami, podobną do programu Jira. Chcemy, aby program zawierał następujące funkcjonalności:
 <ol>
     <li>Możliwość tworzenia kont użytkownika</li>
     <li>System logowania</li>
@@ -35,6 +35,19 @@ Aktualna aplikacja prezentuje się następująco:
 
 
 ## Konteneryzacja
+
+Aby uruchomić aplikację należy wykorzystać `docker compose`. Uruchomiona aplikacja będzie działała pod portem `5000` [aplikacja]
+a dostęp do api będzie możliwy pod portem `8080`
+```bash
+docker compose up
+```
+Do przebudowania od nowa potrzeba flag `--force-recreate` oraz `--build`
+
+Aby ją zatrzymać należy użyć polecenia
+```bash
+docker compose down --remove-orphans
+```
+
 Do poprawnego działania aplikacji potrzebne jest połączenie z bazą danych.
 Aby takie połączenie zestawić należy uruchomić kontener z bazą danych mongodb
 ```bash
@@ -56,3 +69,4 @@ docker run -p 8080:8080 my-spring-app
 
 [//]: # (link)
 [dokumentacja API]: http://localhost:8080/swagger-ui/index.html
+[aplikacja]: http://localhost:5000

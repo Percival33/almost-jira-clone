@@ -1,12 +1,7 @@
 FROM gradle:jdk17-alpine AS build
-#WORKDIR /app
-#ADD --chown=gradle:gradle . /app
-
-#RUN ./gradlew build --stacktrace
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle assemble
-#    --no-daemon`
 
 
 FROM openjdk:17.0.1-jdk-slim
