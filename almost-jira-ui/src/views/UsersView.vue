@@ -58,6 +58,13 @@ li {
   border-bottom-width: 3px;
   border-bottom-style: solid;
 }
+input {
+  border-style: solid;
+  border-width: 3px;
+  border-color: darkgreen;
+  padding: 5px;
+  background: lightgreen;
+}
 </style>
 
 <script>
