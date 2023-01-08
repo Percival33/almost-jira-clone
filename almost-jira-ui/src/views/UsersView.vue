@@ -176,8 +176,12 @@ export default {
       // formData.append("firstName", firstName);
       // formData.append("lastName", lastName);
       // formData.append("password", password);
+      // form = new UserForm(firstName, lastName, password);
       fetch(`${API}/users`, {
         method: "Post",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           firstName: firstName,
           lastName: lastName,
