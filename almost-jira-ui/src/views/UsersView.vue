@@ -174,7 +174,7 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.msg = "";
-          if (Id == "" || data.data === null) {
+          if (Id === "" || data.data === null) {
             this.msg = "Nie ma użytkownika o takim id";
           }
           this.singleUser = data.data;
