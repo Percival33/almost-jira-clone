@@ -50,6 +50,22 @@
     <input v-model="lastName" type="text" placeholder="Nazwisko użytkownika" />
     <input v-model="password" type="text" placeholder="Hasło użytkownika" />
   </div>
+  <div class="changeUser">
+    <button
+      class="addUserButton"
+      @click="changeUser(changeId, newFirstName, newLastName, newPassword)"
+    >
+      Edytuj Użytkownika
+    </button>
+    <input
+      v-model="changeId"
+      type="text"
+      placeholder="Id użytkownika do zmiany"
+    />
+    <input v-model="newFirstName" type="text" placeholder="Nowe imie" />
+    <input v-model="newLastName" type="text" placeholder="Nowe nazwisko" />
+    <input v-model="newPassword" type="text" placeholder="Nowe hasło" />
+  </div>
   <div>
     <p v-if="msg">{{ this.msg }}</p>
   </div>
@@ -188,6 +204,32 @@ export default {
             this.msg = "Użytkownik został dodany";
           } else {
             this.msg = "Nie udało się dodać użytkownika";
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    changeUser(changeId, newFirstName, newLastName, newPassword) {
+      fetch(`${API}/users/${changeId}`, {
+        method: "Put",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: newFirstName,
+          lastName: newLastName,
+          password: newPassword,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.msg = "";
+          if (data.message === "success") {
+            this.msg = "Użytkownik został edytowany";
+          } else {
+            this.msg =
+              "Nie udało się edytować użytkownika. Sprawdź poprawność Id";
           }
         })
         .catch((error) => {
