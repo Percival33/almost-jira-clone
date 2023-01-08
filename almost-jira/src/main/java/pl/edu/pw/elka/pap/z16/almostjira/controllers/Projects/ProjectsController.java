@@ -27,7 +27,7 @@ import java.util.Objects;
 public class ProjectsController {
     @Autowired
     ProjectService projectService;
-    int project_id = 0;
+
     private final ArrayList<Hashtable<String, Object>> projects_data = new ArrayList<>();
 
 //    @PostMapping("add_project")
@@ -54,19 +54,33 @@ public class ProjectsController {
         }
     }
 
-    @PostMapping("change_tasks_in_project_with_id")
-    public ResponseEntity<String> project_change_tasks(@PathVariable("id") int project_id, @RequestParam ArrayList<String> new_project_tasks){
-
-        for (final Hashtable<String, Object> project: projects_data) {
-            if (Objects.equals(project.get("id"), String.valueOf(project_id))){
-                project.replace("project_tasks", new_project_tasks);
-                return new ResponseEntity<>(String.valueOf(project), HttpStatus.OK);
-            }
+    @PostMapping("/{id_for_task}")
+    public ResponseEntity<Object> addTaskToProject(@PathVariable("id_for_task") String projectId, String newTask){
+        try {
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectAddTask(newTask, projectId));
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
-        return new ResponseEntity<>("No such project!", HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("{id}")
+    @PutMapping("/{id_for_task}")
+    public ResponseEntity<Object> modifyTaskInProject(@PathVariable("id_for_task") String project_id, int taskIndex, String modifiedTask){
+        try {
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectModifyTask(taskIndex, modifiedTask, project_id));
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+        }
+    }
+
+    @DeleteMapping("/{id_for_task}")
+    public ResponseEntity<Object> removeTaskFromProject(@PathVariable("id_for_task") String project_id, int taskIndex){
+        try {
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectRemoveTask(taskIndex, project_id));
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+        }
+    }
+    @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteProject(@PathVariable("id") String project_id){
         try {
             projectService.deleteProject(project_id);
@@ -106,7 +120,7 @@ public class ProjectsController {
     }
 
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Object> updateProject(@PathVariable("id") String project_id, @RequestBody ProjectForm p){
         try {
             return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProject(p, project_id));

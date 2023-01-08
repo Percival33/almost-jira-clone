@@ -59,4 +59,54 @@ public class ProjectService {
                         .build());
     }
 
+    public Project updateProjectAddTask(String newTask, String id) {
+        Project existingProject = projectRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Project", "Id", id));
+
+        Date now = new Date();
+
+
+        var updatedTasks = existingProject.tasks();
+        updatedTasks.add(newTask);
+
+
+        Project updatedProject = existingProject.toBuilder()
+                .tasks(updatedTasks)
+                .lastModified(now)
+                .build();
+
+        return projectRepository.save(updatedProject);
+    }
+
+    public Project updateProjectModifyTask(int taskIndex, String modifiedTask, String id) {
+        Project existingProject = projectRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Project", "Id", id));
+
+        Date now = new Date();
+        var updatedTasks = existingProject.tasks();
+        updatedTasks.set(taskIndex-1, modifiedTask);
+
+        Project updatedProject = existingProject.toBuilder()
+                .tasks(updatedTasks)
+                .lastModified(now)
+                .build();
+
+        return projectRepository.save(updatedProject);
+    }
+
+    public Project updateProjectRemoveTask(int taskIndex, String id) {
+        Project existingProject = projectRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Project", "Id", id));
+
+        Date now = new Date();
+        var updatedTasks = existingProject.tasks();
+        updatedTasks.remove(taskIndex-1);
+
+        Project updatedProject = existingProject.toBuilder()
+                .tasks(updatedTasks)
+                .lastModified(now)
+                .build();
+
+        return projectRepository.save(updatedProject);
+    }
 }
