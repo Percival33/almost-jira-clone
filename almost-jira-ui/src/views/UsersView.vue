@@ -1,73 +1,79 @@
 <template>
-  <div class="users">
-    <button class="getUsersButton" @click="toggleUsers">
-      {{ showUsers ? "Ukryj użytkowników" : "Pokaż użytkowników" }}
-    </button>
-    <ul v-if="showUsers">
-      <li v-for="user in results" :key="user.id">
-        <p>ID: {{ user.id }}</p>
-        <p>Imię: {{ user.firstName }}</p>
-        <p>Nazwisko: {{ user.lastName }}</p>
-      </li>
-    </ul>
-  </div>
-  <div class="singleUser">
-    <button class="getUserButton" @click="getUser(Id)">
-      Pokaż użytkownika
-    </button>
-    <input v-model="Id" type="text" placeholder="Podaj ID użytkownika" />
-    <p v-if="singleUser">
-      ID: {{ singleUser.id }}<br />
-      Imię: {{ singleUser.firstName }}<br />
-      Nazwisko: {{ singleUser.lastName }}<br />
-      Data dodania: {{ singleUser.createdAt }}<br />
-      Data ostatniej edycji: {{ singleUser.lastModified }}
-    </p>
-    <ul v-if="singleUser">
-      <li v-for="project in singleUser.projects" :key="project.id">
-        <p>Nazwa projektu: project.projectName</p>
-      </li>
-    </ul>
-  </div>
-  <div class="deleteUser">
-    <button class="deleteUserButton" @click="deleteUser(deleteId)">
-      Usuń użytkownika
-    </button>
-    <input
-      v-model="deleteId"
-      type="text"
-      placeholder="Podaj ID użytkownika do usunięcia"
-    />
-  </div>
-  <div class="addUser">
-    <button
-      class="addUserButton"
-      @click="addUser(firstName, lastName, password)"
-    >
-      Dodaj Użytkownika
-    </button>
-    <input v-model="firstName" type="text" placeholder="Imie użytkownika" />
-    <input v-model="lastName" type="text" placeholder="Nazwisko użytkownika" />
-    <input v-model="password" type="text" placeholder="Hasło użytkownika" />
-  </div>
-  <div class="changeUser">
-    <button
-      class="addUserButton"
-      @click="changeUser(changeId, newFirstName, newLastName, newPassword)"
-    >
-      Edytuj Użytkownika
-    </button>
-    <input
-      v-model="changeId"
-      type="text"
-      placeholder="Id użytkownika do zmiany"
-    />
-    <input v-model="newFirstName" type="text" placeholder="Nowe imie" />
-    <input v-model="newLastName" type="text" placeholder="Nowe nazwisko" />
-    <input v-model="newPassword" type="text" placeholder="Nowe hasło" />
-  </div>
-  <div>
-    <p v-if="msg">{{ this.msg }}</p>
+  <div class="usersview">
+    <div class="users">
+      <button class="getUsersButton" @click="toggleUsers">
+        {{ showUsers ? "Ukryj użytkowników" : "Pokaż użytkowników" }}
+      </button>
+      <ul v-if="showUsers">
+        <li v-for="user in results" :key="user.id">
+          <p>ID: {{ user.id }}</p>
+          <p>Imię: {{ user.firstName }}</p>
+          <p>Nazwisko: {{ user.lastName }}</p>
+        </li>
+      </ul>
+    </div>
+    <div class="singleUser">
+      <button class="getUserButton" @click="getUser(Id)">
+        Pokaż użytkownika
+      </button>
+      <input v-model="Id" type="text" placeholder="Podaj ID użytkownika" />
+      <p v-if="singleUser">
+        ID: {{ singleUser.id }}<br />
+        Imię: {{ singleUser.firstName }}<br />
+        Nazwisko: {{ singleUser.lastName }}<br />
+        Data dodania: {{ singleUser.createdAt }}<br />
+        Data ostatniej edycji: {{ singleUser.lastModified }}
+      </p>
+      <ul v-if="singleUser">
+        <li v-for="project in singleUser.projects" :key="project.id">
+          <p>Nazwa projektu: project.projectName</p>
+        </li>
+      </ul>
+    </div>
+    <div class="deleteUser">
+      <button class="deleteUserButton" @click="deleteUser(deleteId)">
+        Usuń użytkownika
+      </button>
+      <input
+        v-model="deleteId"
+        type="text"
+        placeholder="Podaj ID użytkownika do usunięcia"
+      />
+    </div>
+    <div class="addUser">
+      <button
+        class="addUserButton"
+        @click="addUser(firstName, lastName, password)"
+      >
+        Dodaj Użytkownika
+      </button>
+      <input v-model="firstName" type="text" placeholder="Imie użytkownika" />
+      <input
+        v-model="lastName"
+        type="text"
+        placeholder="Nazwisko użytkownika"
+      />
+      <input v-model="password" type="text" placeholder="Hasło użytkownika" />
+    </div>
+    <div class="changeUser">
+      <button
+        class="addUserButton"
+        @click="changeUser(changeId, newFirstName, newLastName, newPassword)"
+      >
+        Edytuj Użytkownika
+      </button>
+      <input
+        v-model="changeId"
+        type="text"
+        placeholder="Id użytkownika do zmiany"
+      />
+      <input v-model="newFirstName" type="text" placeholder="Nowe imie" />
+      <input v-model="newLastName" type="text" placeholder="Nowe nazwisko" />
+      <input v-model="newPassword" type="text" placeholder="Nowe hasło" />
+    </div>
+    <div>
+      <p v-if="msg">{{ this.msg }}</p>
+    </div>
   </div>
 </template>
 
@@ -103,6 +109,11 @@
   background: chartreuse;
   border-color: darkgreen;
   font-size: 18px;
+}
+.usersview {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 ul {
   border-style: solid;
