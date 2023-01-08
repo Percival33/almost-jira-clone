@@ -54,28 +54,37 @@ public class ProjectsController {
         }
     }
 
-    @PostMapping("/{id_for_task}")
+    @PostMapping("/tasks/{id_for_task}")
     public ResponseEntity<Object> addTaskToProject(@PathVariable("id_for_task") String projectId, String newTask){
         try {
-            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectAddTask(newTask, projectId));
+            var modifiedList = projectService.getTasks(projectId);
+            if (modifiedList == null)
+                modifiedList = new ArrayList<String>();
+            modifiedList.add(newTask);
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectUpdateTasks(modifiedList, projectId));
         } catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
     }
 
-    @PutMapping("/{id_for_task}")
+    @PutMapping("/tasks/{id_for_task}")
     public ResponseEntity<Object> modifyTaskInProject(@PathVariable("id_for_task") String project_id, int taskIndex, String modifiedTask){
         try {
-            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectModifyTask(taskIndex, modifiedTask, project_id));
+
+            var modifiedList = projectService.getTasks(project_id);
+            modifiedList.set(taskIndex-1, modifiedTask);
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectUpdateTasks(modifiedList, project_id));
         } catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
     }
 
-    @DeleteMapping("/{id_for_task}")
+    @DeleteMapping("/tasks/{id_for_task}")
     public ResponseEntity<Object> removeTaskFromProject(@PathVariable("id_for_task") String project_id, int taskIndex){
         try {
-            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectRemoveTask(taskIndex, project_id));
+            var modifiedList = projectService.getTasks(project_id);
+            modifiedList.remove(taskIndex-1);
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectUpdateTasks(modifiedList, project_id));
         } catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
