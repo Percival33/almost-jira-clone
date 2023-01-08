@@ -16,7 +16,6 @@
       Pokaż użytkownika
     </button>
     <input v-model="Id" type="text" placeholder="Podaj ID użytkownika" />
-    <p v-if="msg">{{ this.msg }}</p>
     <p v-if="singleUser">
       ID: {{ singleUser.id }}<br />
       Imię: {{ singleUser.firstName }}<br />
@@ -39,7 +38,6 @@
       type="text"
       placeholder="Podaj ID użytkownika do usunięcia"
     />
-    <p v-if="deleteMsg">{{ this.deleteMsg }}</p>
   </div>
   <div class="addUser">
     <button
@@ -51,7 +49,9 @@
     <input v-model="firstName" type="text" placeholder="Imie użytkownika" />
     <input v-model="lastName" type="text" placeholder="Nazwisko użytkownika" />
     <input v-model="password" type="text" placeholder="Hasło użytkownika" />
-    <p v-if="addMsg">{{ this.addMsg }}</p>
+  </div>
+  <div>
+    <p v-if="msg">{{ this.msg }}</p>
   </div>
 </template>
 
@@ -123,8 +123,6 @@ export default {
       showUsers: false,
       singleUser: false,
       msg: "",
-      deleteMsg: "",
-      addMsg: "",
     };
   },
   methods: {
@@ -162,9 +160,9 @@ export default {
       fetch(`${API}/users/${deleteId}`, { method: "DELETE" })
         .then((response) => response.json())
         .then((data) => {
-          this.deleteMsg = "Użytkownik został usunięty";
+          this.msg = "Użytkownik został usunięty";
           if (data.status === 404) {
-            this.deleteMsg = "Nie ma takiego użytkownika";
+            this.msg = "Nie można usunąć użytkownika o nieistniejącym id";
           }
         })
         .catch((error) => {
@@ -172,11 +170,6 @@ export default {
         });
     },
     addUser(firstName, lastName, password) {
-      // const formData = new FormData();
-      // formData.append("firstName", firstName);
-      // formData.append("lastName", lastName);
-      // formData.append("password", password);
-      // form = new UserForm(firstName, lastName, password);
       fetch(`${API}/users`, {
         method: "Post",
         headers: {
@@ -190,9 +183,11 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          this.addMsg = "";
+          this.msg = "";
           if (data.message === "success") {
-            this.deleteMsg = "Użytkownik został dodany";
+            this.msg = "Użytkownik został dodany";
+          } else {
+            this.msg = "Nie udało się dodać użytkownika";
           }
         })
         .catch((error) => {
