@@ -53,9 +53,9 @@ export default {
   methods: {
     toggleProjects() {
       this.showProjects = !this.showProjects;
-      this.getProjects();
-      // if (!this.results.length) {
-      // }
+      if (this.showProjects) {
+        this.getProjects();
+      }
     },
     getProjects() {
       fetch(`${API}/projects`)

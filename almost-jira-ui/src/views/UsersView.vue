@@ -55,7 +55,7 @@ export default {
   methods: {
     toggleUsers() {
       this.showUsers = !this.showUsers;
-      if (!this.results.length) {
+      if (this.showUsers) {
         this.getUsers();
       }
     },
