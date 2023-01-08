@@ -35,7 +35,11 @@ Aktualna aplikacja prezentuje się następująco:
 
 
 ## Konteneryzacja
-
+Przed uruchomieniem aplikacji należy stworzyć plik `.env` w którym należy podmienić wartości zmiennych.
+```
+DB_USER=<user>
+DB_PASSWORD=<passwd>
+```
 Aby uruchomić aplikację należy wykorzystać `docker compose`. Uruchomiona aplikacja będzie działała pod portem `5000` [aplikacja]
 a dostęp do api będzie możliwy pod portem `8080`
 ```bash
@@ -48,17 +52,14 @@ Aby ją zatrzymać należy użyć polecenia
 docker compose down --remove-orphans
 ```
 
-Do poprawnego działania aplikacji potrzebne jest połączenie z bazą danych.
-Aby takie połączenie zestawić należy uruchomić kontener z bazą danych mongodb
-```bash
-docker run -d --name almost-jira-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=okon mongo
-```
+[//]: # (```bash)
 
-Żeby uruchomić aplikacje należy zbudować kontener i uruchomić go (proces uruchomienia może trwać nawet kilka minut)
-```bash
-docker build -t my-spring-app .
-docker run -p 8080:8080 my-spring-app
-```
+[//]: # (docker run -d --name almost-jira-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=okon mongo)
+
+[//]: # (```)
+
+## Baza danych
+Aplikacja wykorzystuje bazę danych mongodb, która jest hostowana a zewnetrznym serwisie `MongoDBCloud`
 
 ### TODO
 - [ ] dodać walidacje danych
