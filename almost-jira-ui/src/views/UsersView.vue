@@ -30,6 +30,17 @@
       </li>
     </ul>
   </div>
+  <div class="delete-user">
+    <button class="getUserButton" @click="deleteUser(deleteId)">
+      Usuń użytkownika
+    </button>
+    <input
+      v-model="deleteId"
+      type="text"
+      placeholder="Podaj ID użytkownika do usunięcia"
+    />
+    <p v-if="deleteMsg">{{ this.deleteMsg }}</p>
+  </div>
 </template>
 
 <style>
@@ -86,6 +97,7 @@ export default {
       showUsers: false,
       single_user: false,
       msg: "",
+      deleteMsg: "",
     };
   },
   methods: {
@@ -116,7 +128,22 @@ export default {
           this.single_user = data.data;
         })
         .catch((error) => {
-          console.log("siema siema", error);
+          console.log(error);
+        });
+    },
+    deleteUser(deleteId) {
+      fetch(`${API}/users/${deleteId}`, { method: "DELETE" })
+        .then((response) => response.json())
+        .then((data) => {
+          this.deleteMsg = "";
+          if (deleteId == "" || data.data === null) {
+            this.deleteMsg = "Nie ma użytkownika o takim id";
+          } else {
+            this.deleteMsg = "Użytkownik został usunięty";
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
   },
