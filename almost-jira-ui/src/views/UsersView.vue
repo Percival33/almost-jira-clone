@@ -19,7 +19,9 @@
     <p v-if="single_user">
       ID: {{ single_user.id }}<br />
       Imię: {{ single_user.firstName }}<br />
-      Nazwisko: {{ single_user.lastName }}
+      Nazwisko: {{ single_user.lastName }}<br />
+      Data dodania: {{ single_user.createdAt }}<br />
+      Data ostatniej edycji: {{ single_user.lastModified }}
     </p>
   </div>
 </template>
