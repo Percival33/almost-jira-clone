@@ -11,7 +11,7 @@
       </li>
     </ul>
   </div>
-  <div class="single-user">
+  <div class="singleUser">
     <button class="getUserButton" @click="getUser(Id)">
       Pokaż użytkownika
     </button>
@@ -30,7 +30,7 @@
       </li>
     </ul>
   </div>
-  <div class="delete-user">
+  <div class="deleteUser">
     <button class="deleteUserButton" @click="deleteUser(deleteId)">
       Usuń użytkownika
     </button>
@@ -40,6 +40,18 @@
       placeholder="Podaj ID użytkownika do usunięcia"
     />
     <p v-if="deleteMsg">{{ this.deleteMsg }}</p>
+  </div>
+  <div class="addUser">
+    <button
+      class="addUserButton"
+      @click="addUser(firstName, lastName, password)"
+    >
+      Dodaj Użytkownika
+    </button>
+    <input v-model="firstName" type="text" placeholder="Imie użytkownika" />
+    <input v-model="lastName" type="text" placeholder="Nazwisko użytkownika" />
+    <input v-model="password" type="text" placeholder="Hasło użytkownika" />
+    <p v-if="addMsg">{{ this.addMsg }}</p>
   </div>
 </template>
 
@@ -61,6 +73,14 @@
   font-size: 18px;
 }
 .deleteUserButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
+}
+.addUserButton {
   width: 200px;
   height: 50px;
   color: black;
@@ -104,6 +124,7 @@ export default {
       singleUser: false,
       msg: "",
       deleteMsg: "",
+      addMsg: "",
     };
   },
   methods: {
@@ -144,6 +165,30 @@ export default {
           this.deleteMsg = "Użytkownik został usunięty";
           if (data.status === 404) {
             this.deleteMsg = "Nie ma takiego użytkownika";
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    addUser(firstName, lastName, password) {
+      // const formData = new FormData();
+      // formData.append("firstName", firstName);
+      // formData.append("lastName", lastName);
+      // formData.append("password", password);
+      fetch(`${API}/users`, {
+        method: "Post",
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.addMsg = "";
+          if (data.message === "success") {
+            this.deleteMsg = "Użytkownik został dodany";
           }
         })
         .catch((error) => {
