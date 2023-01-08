@@ -17,15 +17,15 @@
     </button>
     <input v-model="Id" type="text" placeholder="Podaj ID użytkownika" />
     <p v-if="msg">{{ this.msg }}</p>
-    <p v-if="single_user">
-      ID: {{ single_user.id }}<br />
-      Imię: {{ single_user.firstName }}<br />
-      Nazwisko: {{ single_user.lastName }}<br />
-      Data dodania: {{ single_user.createdAt }}<br />
-      Data ostatniej edycji: {{ single_user.lastModified }}
+    <p v-if="singleUser">
+      ID: {{ singleUser.id }}<br />
+      Imię: {{ singleUser.firstName }}<br />
+      Nazwisko: {{ singleUser.lastName }}<br />
+      Data dodania: {{ singleUser.createdAt }}<br />
+      Data ostatniej edycji: {{ singleUser.lastModified }}
     </p>
-    <ul v-if="single_user">
-      <li v-for="project in single_user.projects" :key="project.id">
+    <ul v-if="singleUser">
+      <li v-for="project in singleUser.projects" :key="project.id">
         <p>Nazwa projektu: project.projectName</p>
       </li>
     </ul>
@@ -95,7 +95,7 @@ export default {
     return {
       results: [],
       showUsers: false,
-      single_user: false,
+      singleUser: false,
       msg: "",
       deleteMsg: "",
     };
@@ -125,7 +125,7 @@ export default {
           if (Id == "" || data.data === null) {
             this.msg = "Nie ma użytkownika o takim id";
           }
-          this.single_user = data.data;
+          this.singleUser = data.data;
         })
         .catch((error) => {
           console.log(error);
