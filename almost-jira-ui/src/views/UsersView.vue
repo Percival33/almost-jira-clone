@@ -16,6 +16,7 @@
       Pokaż użytkownika
     </button>
     <input v-model="Id" type="text" placeholder="Podaj ID użytkownika" />
+    <p v-if="msg">{{ this.msg }}</p>
     <p v-if="single_user">
       ID: {{ single_user.id }}<br />
       Imię: {{ single_user.firstName }}<br />
@@ -84,6 +85,7 @@ export default {
       results: [],
       showUsers: false,
       single_user: false,
+      msg: "",
     };
   },
   methods: {
@@ -107,6 +109,10 @@ export default {
       fetch(`${API}/users/${Id}`)
         .then((response) => response.json())
         .then((data) => {
+          this.msg = "";
+          if (Id == "" || data.data === null) {
+            this.msg = "Nie ma użytkownika o takim id";
+          }
           this.single_user = data.data;
         })
         .catch((error) => {
