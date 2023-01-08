@@ -11,10 +11,29 @@
       </li>
     </ul>
   </div>
+  <div class="single-user">
+    <input v-model="Id" type="text" placeholder="Podaj ID użytkownika" />
+    <button class="getUserButton" @click="getUser(Id)">
+      Pokaż użytkownika
+    </button>
+    <p v-if="user">
+      ID: {{ user.id }}<br />
+      Imię: {{ user.firstName }}<br />
+      Nazwisko: {{ user.lastName }} /
+    </p>
+  </div>
 </template>
 
 <style>
 .getUsersButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
+}
+.getUserButton {
   width: 200px;
   height: 50px;
   color: black;
@@ -64,6 +83,16 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.results = data.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getUser(Id) {
+      fetch(`${API}/users/${Id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          this.user = data.data;
         })
         .catch((error) => {
           console.log(error);
