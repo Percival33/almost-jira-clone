@@ -27,7 +27,7 @@ import java.util.Objects;
 public class ProjectsController {
     @Autowired
     ProjectService projectService;
-    int project_id = 0;
+
     private final ArrayList<Hashtable<String, Object>> projects_data = new ArrayList<>();
 
 //    @PostMapping("add_project")
@@ -54,39 +54,49 @@ public class ProjectsController {
         }
     }
 
-    @PutMapping("change_name_of_project_with_id")
-    public ResponseEntity<String> change_project_name(@PathVariable("id") int project_id, @RequestParam String new_project_name){
-
-        for (final Hashtable<String, Object> project: projects_data) {
-            if (Objects.equals(project.get("id"), String.valueOf(project_id))){
-                project.replace("projectName", new_project_name);
-                return new ResponseEntity<>(String.valueOf(project), HttpStatus.OK);
-            }
+    @PostMapping("/tasks/{id_for_task}")
+    public ResponseEntity<Object> addTaskToProject(@PathVariable("id_for_task") String projectId, String newTask){
+        try {
+            var modifiedList = projectService.getTasks(projectId);
+            if (modifiedList == null)
+                modifiedList = new ArrayList<String>();
+            modifiedList.add(newTask);
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectUpdateTasks(modifiedList, projectId));
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
-        return new ResponseEntity<>("No such project!", HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("change_tasks_in_project_with_id")
-    public ResponseEntity<String> project_change_tasks(@PathVariable("id") int project_id, @RequestParam ArrayList<String> new_project_tasks){
+    @PutMapping("/tasks/{id_for_task}")
+    public ResponseEntity<Object> modifyTaskInProject(@PathVariable("id_for_task") String project_id, int taskIndex, String modifiedTask){
+        try {
 
-        for (final Hashtable<String, Object> project: projects_data) {
-            if (Objects.equals(project.get("id"), String.valueOf(project_id))){
-                project.replace("project_tasks", new_project_tasks);
-                return new ResponseEntity<>(String.valueOf(project), HttpStatus.OK);
-            }
+            var modifiedList = projectService.getTasks(project_id);
+            modifiedList.set(taskIndex-1, modifiedTask);
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectUpdateTasks(modifiedList, project_id));
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
-        return new ResponseEntity<>("No such project!", HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("delete_project_with_id")
-    public ResponseEntity<String> remove_project(@PathVariable("id") int project_id){
-        for (final Hashtable<String, Object> project: projects_data) {
-            if (Objects.equals(project.get("id"), String.valueOf(project_id))){
-                projects_data.remove(project);
-                return new ResponseEntity<>("Project deleted!", HttpStatus.OK);
-            }
+    @DeleteMapping("/tasks/{id_for_task}")
+    public ResponseEntity<Object> removeTaskFromProject(@PathVariable("id_for_task") String project_id, int taskIndex){
+        try {
+            var modifiedList = projectService.getTasks(project_id);
+            modifiedList.remove(taskIndex-1);
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectUpdateTasks(modifiedList, project_id));
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
-        return new ResponseEntity<>("No such project!", HttpStatus.NOT_FOUND);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteProject(@PathVariable("id") String project_id){
+        try {
+            projectService.deleteProject(project_id);
+            return ResponseHandler.generateResponse("success", HttpStatus.NO_CONTENT, "Project deleted successfully!");
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+        }
     }
 
 //    @GetMapping("get_project_with_id")
@@ -118,6 +128,15 @@ public class ProjectsController {
         }
     }
 
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateProject(@PathVariable("id") String project_id, @RequestBody ProjectForm p){
+        try {
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProject(p, project_id));
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+        }
+    }
 // lista słownikow reprezentujacych pojedynczy projekt
 // metoda zeby odczytac dane z projektu o danym Id
 // metoda zeby dodac projekt do listy (dba zeby id bylo unikalne)
