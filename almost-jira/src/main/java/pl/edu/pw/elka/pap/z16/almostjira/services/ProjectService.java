@@ -24,28 +24,28 @@ public class ProjectService {
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
-//
-//    public void deleteUser(String id) {
-//        projectRepository.findById(id).orElseThrow(() ->
-//                new ResourceNotFoundException("User", "id", id));
-//        projectRepository.deleteById(id);
-//    }
-//
-//    public User updateUser(UserForm u, String id) {
-//        User existingUser = projectRepository.findById(id).orElseThrow(
-//                () -> new ResourceNotFoundException("User", "Id", id));
-//
-//        Date now = new Date();
-//        User updatedUser = existingUser.toBuilder()
-//                .firstName(u.firstName())
-//                .lastName(u.lastName())
-//                .password(u.password())
-//                .lastModified(now)
-//                .build();
-//
-//        return projectRepository.save(updatedUser);
-//    }
-//
+
+    public void deleteProject(String id) {
+        projectRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Project", "id", id));
+        projectRepository.deleteById(id);
+    }
+
+    public Project updateProject(ProjectForm p, String id) {
+        Project existingProject = projectRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Project", "Id", id));
+
+        Date now = new Date();
+        Project updatedProject = existingProject.toBuilder()
+                .overseerId(p.overseerId())
+                .projectName(p.projectName())
+                .tasks(p.tasks())
+                .lastModified(now)
+                .build();
+
+        return projectRepository.save(updatedProject);
+    }
+
     public Project createProject(ProjectForm p) {
         Date now = new Date();
         return projectRepository.save(
@@ -58,4 +58,5 @@ public class ProjectService {
                         .tasks(null)
                         .build());
     }
+
 }

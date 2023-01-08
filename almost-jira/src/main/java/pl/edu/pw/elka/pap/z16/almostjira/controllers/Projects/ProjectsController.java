@@ -78,15 +78,14 @@ public class ProjectsController {
         return new ResponseEntity<>("No such project!", HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("delete_project_with_id")
-    public ResponseEntity<String> remove_project(@PathVariable("id") int project_id){
-        for (final Hashtable<String, Object> project: projects_data) {
-            if (Objects.equals(project.get("id"), String.valueOf(project_id))){
-                projects_data.remove(project);
-                return new ResponseEntity<>("Project deleted!", HttpStatus.OK);
-            }
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> deleteProject(@PathVariable("id") String project_id){
+        try {
+            projectService.deleteProject(project_id);
+            return ResponseHandler.generateResponse("success", HttpStatus.NO_CONTENT, "Project deleted successfully!");
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
-        return new ResponseEntity<>("No such project!", HttpStatus.NOT_FOUND);
     }
 
 //    @GetMapping("get_project_with_id")
@@ -118,6 +117,15 @@ public class ProjectsController {
         }
     }
 
+
+    @PutMapping("{id}")
+    public ResponseEntity<Object> updateProject(@PathVariable("id") String project_id, @RequestBody ProjectForm p){
+        try {
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProject(p, project_id));
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+        }
+    }
 // lista słownikow reprezentujacych pojedynczy projekt
 // metoda zeby odczytac dane z projektu o danym Id
 // metoda zeby dodac projekt do listy (dba zeby id bylo unikalne)
