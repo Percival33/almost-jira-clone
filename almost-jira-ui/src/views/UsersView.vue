@@ -31,7 +31,7 @@
     </ul>
   </div>
   <div class="delete-user">
-    <button class="getUserButton" @click="deleteUser(deleteId)">
+    <button class="deleteUserButton" @click="deleteUser(deleteId)">
       Usuń użytkownika
     </button>
     <input
@@ -60,7 +60,14 @@
   border-color: darkgreen;
   font-size: 18px;
 }
-
+.deleteUserButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
+}
 ul {
   border-style: solid;
   border-width: 3px;
@@ -68,7 +75,6 @@ ul {
   padding: 5px;
   background: lightgreen;
 }
-
 li {
   color: black;
   list-style: none;
@@ -135,11 +141,9 @@ export default {
       fetch(`${API}/users/${deleteId}`, { method: "DELETE" })
         .then((response) => response.json())
         .then((data) => {
-          this.deleteMsg = "";
-          if (deleteId == "" || data.data === null) {
-            this.deleteMsg = "Nie ma użytkownika o takim id";
-          } else {
-            this.deleteMsg = "Użytkownik został usunięty";
+          this.deleteMsg = "Użytkownik został usunięty";
+          if (data.status === 404) {
+            this.deleteMsg = "Nie ma takiego użytkownika";
           }
         })
         .catch((error) => {
