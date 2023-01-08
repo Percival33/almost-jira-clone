@@ -54,18 +54,6 @@ public class ProjectsController {
         }
     }
 
-    @PutMapping("change_name_of_project_with_id")
-    public ResponseEntity<String> change_project_name(@PathVariable("id") int project_id, @RequestParam String new_project_name){
-
-        for (final Hashtable<String, Object> project: projects_data) {
-            if (Objects.equals(project.get("id"), String.valueOf(project_id))){
-                project.replace("projectName", new_project_name);
-                return new ResponseEntity<>(String.valueOf(project), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>("No such project!", HttpStatus.NOT_FOUND);
-    }
-
     @PostMapping("change_tasks_in_project_with_id")
     public ResponseEntity<String> project_change_tasks(@PathVariable("id") int project_id, @RequestParam ArrayList<String> new_project_tasks){
 

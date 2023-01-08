@@ -37,9 +37,9 @@ public class ProjectService {
 
         Date now = new Date();
         Project updatedProject = existingProject.toBuilder()
-                .overseerId(p.overseerId())
-                .projectName(p.projectName())
-                .tasks(p.tasks())
+                .overseerId((p.overseerId() == null) ? existingProject.overseerId() : p.overseerId())
+                .projectName((p.projectName() == null) ? existingProject.projectName() : p.projectName())
+                .tasks((p.tasks() == null) ? existingProject.tasks() : p.tasks())
                 .lastModified(now)
                 .build();
 
