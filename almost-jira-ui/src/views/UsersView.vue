@@ -11,16 +11,47 @@
       </li>
     </ul>
   </div>
-  <div class="single-user">
-    <input v-model="Id" type="text" placeholder="Podaj ID użytkownika" />
+  <div class="singleUser">
     <button class="getUserButton" @click="getUser(Id)">
       Pokaż użytkownika
     </button>
-    <p v-if="user">
-      ID: {{ user.id }}<br />
-      Imię: {{ user.firstName }}<br />
-      Nazwisko: {{ user.lastName }} /
+    <input v-model="Id" type="text" placeholder="Podaj ID użytkownika" />
+    <p v-if="singleUser">
+      ID: {{ singleUser.id }}<br />
+      Imię: {{ singleUser.firstName }}<br />
+      Nazwisko: {{ singleUser.lastName }}<br />
+      Data dodania: {{ singleUser.createdAt }}<br />
+      Data ostatniej edycji: {{ singleUser.lastModified }}
     </p>
+    <ul v-if="singleUser">
+      <li v-for="project in singleUser.projects" :key="project.id">
+        <p>Nazwa projektu: project.projectName</p>
+      </li>
+    </ul>
+  </div>
+  <div class="deleteUser">
+    <button class="deleteUserButton" @click="deleteUser(deleteId)">
+      Usuń użytkownika
+    </button>
+    <input
+      v-model="deleteId"
+      type="text"
+      placeholder="Podaj ID użytkownika do usunięcia"
+    />
+  </div>
+  <div class="addUser">
+    <button
+      class="addUserButton"
+      @click="addUser(firstName, lastName, password)"
+    >
+      Dodaj Użytkownika
+    </button>
+    <input v-model="firstName" type="text" placeholder="Imie użytkownika" />
+    <input v-model="lastName" type="text" placeholder="Nazwisko użytkownika" />
+    <input v-model="password" type="text" placeholder="Hasło użytkownika" />
+  </div>
+  <div>
+    <p v-if="msg">{{ this.msg }}</p>
   </div>
 </template>
 
@@ -41,7 +72,22 @@
   border-color: darkgreen;
   font-size: 18px;
 }
-
+.deleteUserButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
+}
+.addUserButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
+}
 ul {
   border-style: solid;
   border-width: 3px;
@@ -49,7 +95,6 @@ ul {
   padding: 5px;
   background: lightgreen;
 }
-
 li {
   color: black;
   list-style: none;
@@ -57,6 +102,13 @@ li {
   border-bottom-color: black;
   border-bottom-width: 3px;
   border-bottom-style: solid;
+}
+input {
+  border-style: solid;
+  border-width: 3px;
+  border-color: darkgreen;
+  padding: 5px;
+  background: lightgreen;
 }
 </style>
 
@@ -69,6 +121,8 @@ export default {
     return {
       results: [],
       showUsers: false,
+      singleUser: false,
+      msg: "",
     };
   },
   methods: {
@@ -92,7 +146,49 @@ export default {
       fetch(`${API}/users/${Id}`)
         .then((response) => response.json())
         .then((data) => {
-          this.user = data.data;
+          this.msg = "";
+          if (Id == "" || data.data === null) {
+            this.msg = "Nie ma użytkownika o takim id";
+          }
+          this.singleUser = data.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    deleteUser(deleteId) {
+      fetch(`${API}/users/${deleteId}`, { method: "DELETE" })
+        .then((response) => response.json())
+        .then((data) => {
+          this.msg = "Użytkownik został usunięty";
+          if (data.status === 404) {
+            this.msg = "Nie można usunąć użytkownika o nieistniejącym id";
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    addUser(firstName, lastName, password) {
+      fetch(`${API}/users`, {
+        method: "Post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.msg = "";
+          if (data.message === "success") {
+            this.msg = "Użytkownik został dodany";
+          } else {
+            this.msg = "Nie udało się dodać użytkownika";
+          }
         })
         .catch((error) => {
           console.log(error);
