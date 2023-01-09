@@ -1,13 +1,22 @@
 <template>
-  <div class="users">
-    <button class="getProjectsButton" @click="toggleProjects">
-      {{ showProjects ? "Ukryj projekty" : "Pokaż projekty" }}
-    </button>
-    <ul v-if="showProjects">
-      <li v-for="project in results" :key="project.id">
-        <p>{{ project }}</p>
-      </li>
-    </ul>
+  <div class="projectsView">
+    <div class="projects">
+      <button class="getProjectsButton" @click="toggleProjects">
+        {{ showProjects ? "Ukryj projekty" : "Pokaż projekty" }}
+      </button>
+      <ul v-if="showProjects">
+        <li v-for="project in results" :key="project.id">
+          <p>ID: {{ project.id }}</p>
+          <p>Nazwa: {{ project.projectName }}</p>
+          <p>Właściciel: {{ project.overseerId }}</p>
+          <ul v-if="!project.tasks.isEmpty">
+            <li v-for="(task, index) in project.tasks" :key="index">
+              <p>Zadanie {{ index + 1 }}: {{ task }}</p>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
