@@ -46,6 +46,17 @@
         placeholder="Podaj ID projektu do usunięcia"
       />
     </div>
+    <div class="addProject">
+      <button
+        class="addProjectButton"
+        @click="addProject(overseerId, projectName, firstTask)"
+      >
+        Dodaj Projekt
+      </button>
+      <input v-model="overseerId" type="text" placeholder="Id właściciela" />
+      <input v-model="projectName" type="text" placeholder="Nazwa projektu" />
+      <input v-model="firstTask" type="text" placeholder="Pierwsze zadanie" />
+    </div>
     <div>
       <p v-if="msg">{{ this.msg }}</p>
     </div>
@@ -70,6 +81,14 @@
   font-size: 18px;
 }
 .deleteProjectButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
+}
+.addProjectButton {
   width: 200px;
   height: 50px;
   color: black;
@@ -157,6 +176,40 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    addProject(overseerId, projectName, firstTask) {
+      if (firstTask == null) {
+        firstTask = [];
+      } else {
+        firstTask = [firstTask];
+      }
+      if (overseerId == null || projectName == null) {
+        this.msg = "Aby dodać projekt podaj nazwę i właściciela";
+      } else {
+        fetch(`${API}/projects`, {
+          method: "Post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            overseerId: overseerId,
+            projectName: projectName,
+            tasks: firstTask,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            this.msg = "";
+            if (data.message === "success") {
+              this.msg = "Projekt został dodany";
+            } else {
+              this.msg = "Nie udało się dodać projektu";
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
   },
 };
