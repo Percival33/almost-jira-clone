@@ -1,5 +1,5 @@
 <template>
-  <div class="usersview">
+  <div class="usersView">
     <div class="users">
       <button class="getUsersButton" @click="toggleUsers">
         {{ showUsers ? "Ukryj użytkowników" : "Pokaż użytkowników" }}
@@ -110,7 +110,7 @@
   border-color: darkgreen;
   font-size: 18px;
 }
-.usersview {
+.usersView {
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
