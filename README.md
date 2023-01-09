@@ -1,6 +1,15 @@
 # PAP22-Z16
 
-### Lista członków zespołu:
+## Table of Contents
+
+1. [członkowie zespołu](##Lista-członków-zespołu)
+2. [zadanie](#Treść-zadania)
+3. [aktualny stan rozwiązania](#Aktualny-poziom-zaawansowania-rozwiazania)
+4. [Konteneryzacja i uruchomienie](#Konteneryzacja)
+5. [Baza danych](#baza-danych)
+
+## Lista członków zespołu:
+
 <ul>
     <li>Marcin Jarczewski</li>
     <li>Franciszek Malewski</li>
@@ -8,8 +17,10 @@
     <li>Michał Ładyżyński</li>
 </ul>
 
-### Treść zadania:
+## Treść zadania:
+
 W ramach projektu z przedmiotu Programowanie Aplikacyjne planujemy stworzyć aplikację umożliwiającą bugtracking i zarządzanie projektami, podobną do programu Jira. Chcemy, aby program zawierał następujące funkcjonalności:
+
 <ol>
     <li>Możliwość tworzenia kont użytkownika</li>
     <li>System logowania</li>
@@ -19,55 +30,61 @@ W ramach projektu z przedmiotu Programowanie Aplikacyjne planujemy stworzyć apl
     <li>Inne, jeszcze nie wyznaczone</li>
 </ol>
 
-### Opis rozwiązania:
-Wybrana technologia: Java Spring
-Dostępna po uruchomieniu programu [dokumentacja API]
+## Aktualny poziom zaawansowania rozwiazania:
 
-### Aktualny poziom zaawansowania rozwiazania:
-W celu uruchomienia programu, konieczna jest jego kompilacja. Najpierw przy użyciu Gradle, a następnie za pomocą SpringBoot.
-Następnie otworzenie programu jest możliwe po otworzeniu następującego adresu w przeglądarce: [dokumentacja API]
+Wybrana przez nas technologia: Java Spring po stronie serwerowej oraz Vue.js po stronie klienckiej. Korzystamy również z nierelacyjnej bazy dancyh - MongoDb.
 
-Na ten moment zostały zaimplementowane funkcje, które w niedalekiej przyszłości posłużą do stworzenia funkcjonującej aplikacji.
-Projekt został również zintegrowany ze Swagger UI, który za sprawą naszych wysiłków umożliwia przetestowanie zaimplementowanych funkcji.
-Aktualna aplikacja prezentuje się następująco:
+Na ten moment aplikacja realizuje podstawowe założenia i posiada funkcjonalności, które pozwalają na dodawanie, odczytywanie, aktualizacje oraz usuwanie zarówno użytkowników jak i projektów oraz zadań do poszczególnych projektów. Możliwa jest również manipulacja zadaniami w obrębie projektu.
 
-![Current implementation](img/swagger.png)
-
+<details>
+  <summary markdown="span">dokumentacja API - dostępne endpointy</summary>
+    <img src="img/swagger.png"/>
+</details>
 
 ## Konteneryzacja
-Przed uruchomieniem aplikacji należy stworzyć plik `.env` w którym należy podmienić wartości zmiennych.
+
+Aplikacja jest przygotowana do uruchomienia za pomocą `docker compose`, który buduje oddzielne kontenery na `API` oraz `UI`. Proces budowania pierwszy raz zależy w dużym stopniu od jakości łącza internetowego, gdyż potrzebne jest pobranie odpowiednich obrazów.
+
+### Uruchomienie programu
+
+Aby uruchomić aplikację z wykorzystaniem konteneryzacji należy stworzyć plik `.env` w którym, należy podmienić wartości zmiennych. Są to dane do logowania do bazy danych.
+
 ```
 DB_USER=<user>
 DB_PASSWORD=<passwd>
 ```
-Aby uruchomić aplikację należy wykorzystać `docker compose`. Uruchomiona aplikacja będzie działała pod portem `5000` [aplikacja]
-a dostęp do api będzie możliwy pod portem `8080`
+
+Aby uruchomić aplikację należy wykorzystać `docker compose`. Uruchomiona aplikacja będzie działała pod portem `5000` [aplikacja] a dostęp do api będzie możliwy pod portem `8080`
+
 ```bash
 docker compose up
 ```
+
 Do przebudowania od nowa potrzeba flag `--force-recreate` oraz `--build`
 
 Aby ją zatrzymać należy użyć polecenia
+
 ```bash
 docker compose down --remove-orphans
 ```
 
-[//]: # (```bash)
+> w przypadku korzystania z innej instancji mongodb należy odpowiednio zmodyfikować link przy użyciu którego następuje połączenie z bazą danych. Aby to zrobić należy zmodyfikować zawartośc pliku `pap22z-z16/almost-jira/src/main/resources/application.yml`
 
-[//]: # (docker run -d --name almost-jira-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=okon mongo)
+<!-- <br/>
+istnieje możliwość korzystania z lokalnej bazy dancyh aby to zrobić należy:
 
-[//]: # (```)
+    1. zmodyfikować link w `pap22z-z16/almost-jira/src/main/resources/application.yml`.
+    2. uruchomić bazę danych w dockerze
+
+```bash
+docker run -d --name almost-jira-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=okon mongo
+``` -->
 
 ## Baza danych
+
 Aplikacja wykorzystuje bazę danych mongodb, która jest hostowana a zewnetrznym serwisie `MongoDBCloud`
 
-### TODO
-- [ ] dodać walidacje danych
-- [ ] usunąć pole hasło przy zwracaniu wyników
-- [x] dodać zapisywanie hasło i projekty do bazy
-
-[//]: # (/home/percival/.jdks/temurin-17.0.5/bin/java  -jar /home/percival/src/pap22z-z16/almost-jira/build/libs/almost-jira-0.0.1-SNAPSHOT-plain.jar)
-
-[//]: # (link)
-[dokumentacja API]: http://localhost:8080/swagger-ui/index.html
+[//]: # "/home/percival/.jdks/temurin-17.0.5/bin/java  -jar /home/percival/src/pap22z-z16/almost-jira/build/libs/almost-jira-0.0.1-SNAPSHOT-plain.jar"
+[//]: # "link"
+[dokumentacja api]: http://localhost:8080/swagger-ui/index.html
 [aplikacja]: http://localhost:5000
