@@ -55,7 +55,7 @@ public class ProjectService {
                         .projectName(p.projectName())
                         .createdAt(now)
                         .lastModified(now)
-                        .tasks(null)
+                        .tasks(p.tasks())
                         .build());
     }
 
