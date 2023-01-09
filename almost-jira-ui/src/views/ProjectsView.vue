@@ -57,6 +57,29 @@
       <input v-model="projectName" type="text" placeholder="Nazwa projektu" />
       <input v-model="firstTask" type="text" placeholder="Pierwsze zadanie" />
     </div>
+    <div class="changeProject">
+      <button
+        class="changeProjectButton"
+        @click="changeProject(changeId, changeOverseerId, changeProjectName)"
+      >
+        Edytuj Projekt
+      </button>
+      <input
+        v-model="changeId"
+        type="text"
+        placeholder="Id projektu do zmiany"
+      />
+      <input
+        v-model="changeOverseerId"
+        type="text"
+        placeholder="Nowe id właściciela"
+      />
+      <input
+        v-model="changeProjectName"
+        type="text"
+        placeholder="Nowa nazwa projektu"
+      />
+    </div>
     <div>
       <p v-if="msg">{{ this.msg }}</p>
     </div>
@@ -89,6 +112,14 @@
   font-size: 18px;
 }
 .addProjectButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
+}
+.changeProjectButton {
   width: 200px;
   height: 50px;
   color: black;
@@ -130,6 +161,7 @@ export default {
       showProjects: false,
       singleProject: false,
       msg: "",
+      changeProjectBody: null,
     };
   },
   methods: {
@@ -204,6 +236,46 @@ export default {
               this.msg = "Projekt został dodany";
             } else {
               this.msg = "Nie udało się dodać projektu";
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+    changeProject(changeId, changeOverseerId, changeProjectName) {
+      if (changeOverseerId == null && changeProjectName == null) {
+        this.msg = "Podaj wartość w polu które chcesz zedytować";
+      } else {
+        if (changeOverseerId == null) {
+          this.changeProjectBody = JSON.stringify({
+            projectName: changeProjectName,
+          });
+        } else if (changeProjectName == null) {
+          this.changeProjectBody = JSON.stringify({
+            overseerId: changeOverseerId,
+          });
+        } else {
+          this.changeProjectBody = JSON.stringify({
+            overseerId: changeOverseerId,
+            projectName: changeProjectName,
+          });
+        }
+        fetch(`${API}/projects/${changeId}`, {
+          method: "Put",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: this.changeProjectBody,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            this.msg = "";
+            if (data.message === "success") {
+              this.msg = "Projekt został edytowany";
+            } else {
+              this.msg =
+                "Nie udało się edytować projektu. Sprawdź poprawność Id";
             }
           })
           .catch((error) => {
