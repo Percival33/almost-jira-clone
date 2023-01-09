@@ -197,29 +197,33 @@ export default {
         });
     },
     addUser(firstName, lastName, password) {
-      fetch(`${API}/users`, {
-        method: "Post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: firstName,
-          lastName: lastName,
-          password: password,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          this.msg = "";
-          if (data.message === "success") {
-            this.msg = "Użytkownik został dodany";
-          } else {
-            this.msg = "Nie udało się dodać użytkownika";
-          }
+      if (firstName == null || lastName == null || password == null) {
+        this.msg = "Aby dodać użytkownika podaj wartość dla każdego pola";
+      } else {
+        fetch(`${API}/users`, {
+          method: "Post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName: firstName,
+            lastName: lastName,
+            password: password,
+          }),
         })
-        .catch((error) => {
-          console.log(error);
-        });
+          .then((response) => response.json())
+          .then((data) => {
+            this.msg = "";
+            if (data.message === "success") {
+              this.msg = "Użytkownik został dodany";
+            } else {
+              this.msg = "Nie udało się dodać użytkownika";
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
     changeUser(changeId, newFirstName, newLastName, newPassword) {
       fetch(`${API}/users/${changeId}`, {
