@@ -36,6 +36,16 @@
         </li>
       </ul>
     </div>
+    <div class="deleteProject">
+      <button class="deleteProjectButton" @click="deleteProject(deleteId)">
+        Usuń projekt
+      </button>
+      <input
+        v-model="deleteId"
+        type="text"
+        placeholder="Podaj ID projektu do usunięcia"
+      />
+    </div>
     <div>
       <p v-if="msg">{{ this.msg }}</p>
     </div>
@@ -52,6 +62,14 @@
   font-size: 18px;
 }
 .getProjectButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
+}
+.deleteProjectButton {
   width: 200px;
   height: 50px;
   color: black;
@@ -121,6 +139,19 @@ export default {
           this.singleProject = data.data;
           if (Id === "" || data.data === null) {
             this.msg = "Nie ma projektu o takim id";
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    deleteProject(deleteId) {
+      fetch(`${API}/projects/${deleteId}`, { method: "DELETE" })
+        .then((response) => response.json())
+        .then((data) => {
+          this.msg = "Projekt został usunięty";
+          if (data.status === 404) {
+            this.msg = "Nie można usunąć projektu o nieistniejącym id";
           }
         })
         .catch((error) => {
