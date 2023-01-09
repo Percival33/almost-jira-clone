@@ -95,6 +95,24 @@
         placeholder="Opis Zadania do dodania"
       />
     </div>
+    <div class="removeTaskFromProject">
+      <button
+        class="removeTaskFromProjectButton"
+        @click="removeTaskFromProject(removeTaskProjectId, taskToRemoveIndex)"
+      >
+        Usuń zadanie
+      </button>
+      <input
+        v-model="removeTaskProjectId"
+        type="text"
+        placeholder="Id projektu"
+      />
+      <input
+        v-model="taskToRemoveIndex"
+        type="text"
+        placeholder="Numer zadania do usunięcia"
+      />
+    </div>
     <div>
       <p v-if="msg">{{ this.msg }}</p>
     </div>
@@ -143,6 +161,14 @@
   font-size: 18px;
 }
 .addTaskToProjectButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
+}
+.removeTaskFromProjectButton {
   width: 200px;
   height: 50px;
   color: black;
@@ -316,6 +342,24 @@ export default {
           this.msg = "Zadanie zostało dodane";
           if (data.status === 404) {
             this.msg = "Nie udało się dodać zadania";
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    removeTaskFromProject(removeTaskProjectId, taskToRemoveIndex) {
+      fetch(
+        `${API}/projects/${removeTaskProjectId}/tasks?taskIndex=${taskToRemoveIndex}`,
+        {
+          method: "DELETE",
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          this.msg = "Zadanie zostało usunięte";
+          if (data.status === 400) {
+            this.msg = "Nie udało się usunąć zadania";
           }
         })
         .catch((error) => {
