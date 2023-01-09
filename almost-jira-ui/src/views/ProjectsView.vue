@@ -17,6 +17,28 @@
         </li>
       </ul>
     </div>
+    <div class="singleProject">
+      <button class="getProjectButton" @click="getProject(Id)">
+        Pokaż projekt
+      </button>
+      <input v-model="Id" type="text" placeholder="Podaj id projektu" />
+      <p v-if="singleProject">
+        ID: {{ singleProject.id }}<br />
+        Nazwa: {{ singleProject.projectName }}<br />
+        Właściciel: {{ singleProject.overseerId }}<br />
+        Data dodania: {{ singleProject.createdAt }}<br />
+        Data ostatniej edycji: {{ singleProject.lastModified }}
+      </p>
+      <ul v-if="singleProject">
+        <h4>Zadania</h4>
+        <li v-for="(task, index) in singleProject.tasks" :key="index">
+          <p>Zadanie {{ index + 1 }}: {{ task }}</p>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <p v-if="msg">{{ this.msg }}</p>
+    </div>
   </div>
 </template>
 
@@ -29,7 +51,14 @@
   border-color: darkgreen;
   font-size: 18px;
 }
-
+.getProjectButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
+}
 ul {
   border-style: solid;
   border-width: 3px;
@@ -46,6 +75,11 @@ li {
   border-bottom-width: 3px;
   border-bottom-style: solid;
 }
+.projectsView {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 </style>
 
 <script>
@@ -57,6 +91,8 @@ export default {
     return {
       results: [],
       showProjects: false,
+      singleProject: false,
+      msg: "",
     };
   },
   methods: {
@@ -72,6 +108,20 @@ export default {
         .then((data) => {
           // console.log(data);
           this.results = data.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getProject(Id) {
+      fetch(`${API}/projects/${Id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          this.msg = "";
+          this.singleProject = data.data;
+          if (Id === "" || data.data === null) {
+            this.msg = "Nie ma projektu o takim id";
+          }
         })
         .catch((error) => {
           console.log(error);
