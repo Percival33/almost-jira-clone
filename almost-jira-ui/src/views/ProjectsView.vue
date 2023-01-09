@@ -80,6 +80,21 @@
         placeholder="Nowa nazwa projektu"
       />
     </div>
+    <div class="addTaskToProject">
+      <button
+        class="addTaskToProjectButton"
+        @click="addTaskToProject(addTaskProjectId, newTask)"
+      >
+        Dodaj Zadanie
+      </button>
+      <input v-model="addTaskProjectId" type="text" placeholder="Id projektu" />
+      <input
+        v-model="newTask"
+        type="text"
+        style="width: 400px"
+        placeholder="Opis Zadania do dodania"
+      />
+    </div>
     <div>
       <p v-if="msg">{{ this.msg }}</p>
     </div>
@@ -120,6 +135,14 @@
   font-size: 18px;
 }
 .changeProjectButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
+}
+.addTaskToProjectButton {
   width: 200px;
   height: 50px;
   color: black;
@@ -282,6 +305,22 @@ export default {
             console.log(error);
           });
       }
+    },
+    addTaskToProject(addTaskProjectId, newTask) {
+      newTask = encodeURIComponent(newTask);
+      fetch(`${API}/projects/${addTaskProjectId}/tasks?newTask=${newTask}`, {
+        method: "POST",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.msg = "Zadanie zostało dodane";
+          if (data.status === 404) {
+            this.msg = "Nie udało się dodać zadania";
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
