@@ -28,6 +28,8 @@ public class TasksController {
             var modifiedList = projectService.getTasks(projectId);
             if (modifiedList == null)
                 modifiedList = new ArrayList<String>();
+            if (newTask == null || newTask == "")
+                return ResponseHandler.generateResponse("empty task", HttpStatus.OK, projectService.updateProjectUpdateTasks(modifiedList, projectId));
             modifiedList.add(newTask);
             return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProjectUpdateTasks(modifiedList, projectId));
         } catch (Exception e) {
