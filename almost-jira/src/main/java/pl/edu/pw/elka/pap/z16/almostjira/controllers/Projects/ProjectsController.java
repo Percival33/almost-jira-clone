@@ -39,7 +39,7 @@ public class ProjectsController {
     public ResponseEntity<Object> deleteProject(@PathVariable("id") String project_id){
         try {
             projectService.deleteProject(project_id);
-            return ResponseHandler.generateResponse("success", HttpStatus.NO_CONTENT, "Project deleted successfully!");
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, "Project deleted successfully!");
         } catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
