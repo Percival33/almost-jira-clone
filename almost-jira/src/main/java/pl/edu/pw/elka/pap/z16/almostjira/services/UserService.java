@@ -32,6 +32,17 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public User login(String login, String password) {
+        var userlist = getAllUsers();
+        var listiterator = userlist.iterator();
+        while (listiterator.hasNext()){
+            var currentuser = listiterator.next();
+            if (login.equals(currentuser.login()) && password.equals(currentuser.password()))
+                return currentuser;
+        }
+        throw new ResourceNotFoundException("Wrong", "", login);
+    }
+
     public User updateUser(UserForm u, String id) {
         User existingUser = userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User", "Id", id));
@@ -40,6 +51,7 @@ public class UserService {
         User updatedUser = existingUser.toBuilder()
                 .firstName(u.firstName())
                 .lastName(u.lastName())
+                .login(u.login())
                 .password(u.password())
                 .lastModified(now)
                 .build();
@@ -55,6 +67,7 @@ public class UserService {
                         .id(String.valueOf(UUID.randomUUID()))
                         .firstName(u.firstName())
                         .lastName(u.lastName())
+                        .login(u.login())
                         .password(u.password())
                         .projects(null)
                         .createdAt(now)

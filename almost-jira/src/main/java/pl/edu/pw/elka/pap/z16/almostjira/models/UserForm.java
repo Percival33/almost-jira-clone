@@ -10,5 +10,7 @@ public record UserForm(
     @Getter
     String lastName,
     @Getter
+    String login,
+    @Getter
     String password
 ) { }
