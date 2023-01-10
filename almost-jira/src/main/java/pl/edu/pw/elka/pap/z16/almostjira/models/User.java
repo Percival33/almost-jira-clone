@@ -26,6 +26,8 @@ public record User(
         @Setter
         String lastName,
         @Setter
+        String login,
+        @Setter
         String password,
         @Setter
         List<Project> projects

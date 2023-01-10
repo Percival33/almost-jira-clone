@@ -43,7 +43,7 @@
     <div class="addUser">
       <button
         class="addUserButton"
-        @click="addUser(firstName, lastName, password)"
+        @click="addUser(firstName, lastName, login, password)"
       >
         Dodaj Użytkownika
       </button>
@@ -53,12 +53,15 @@
         type="text"
         placeholder="Nazwisko użytkownika"
       />
+      <input v-model="login" type="text" placeholder="Login uzytkownika" />
       <input v-model="password" type="text" placeholder="Hasło użytkownika" />
     </div>
     <div class="changeUser">
       <button
         class="addUserButton"
-        @click="changeUser(changeId, newFirstName, newLastName, newPassword)"
+        @click="
+          changeUser(changeId, newFirstName, newLastName, newLogin, newPassword)
+        "
       >
         Edytuj Użytkownika
       </button>
@@ -69,6 +72,7 @@
       />
       <input v-model="newFirstName" type="text" placeholder="Nowe imie" />
       <input v-model="newLastName" type="text" placeholder="Nowe nazwisko" />
+      <input v-model="newLogin" type="text" placeholder="Nowy login" />
       <input v-model="newPassword" type="text" placeholder="Nowe hasło" />
     </div>
     <div>
@@ -196,8 +200,13 @@ export default {
           console.log(error);
         });
     },
-    addUser(firstName, lastName, password) {
-      if (firstName == null || lastName == null || password == null) {
+    addUser(firstName, lastName, login, password) {
+      if (
+        firstName == null ||
+        lastName == null ||
+        login == null ||
+        password == null
+      ) {
         this.msg = "Aby dodać użytkownika podaj wartość dla każdego pola";
       } else {
         fetch(`${API}/users`, {
@@ -208,6 +217,7 @@ export default {
           body: JSON.stringify({
             firstName: firstName,
             lastName: lastName,
+            login: login,
             password: password,
           }),
         })
@@ -225,7 +235,7 @@ export default {
           });
       }
     },
-    changeUser(changeId, newFirstName, newLastName, newPassword) {
+    changeUser(changeId, newFirstName, newLastName, newLogin, newPassword) {
       fetch(`${API}/users/${changeId}`, {
         method: "Put",
         headers: {
@@ -234,6 +244,7 @@ export default {
         body: JSON.stringify({
           firstName: newFirstName,
           lastName: newLastName,
+          login: newLogin,
           password: newPassword,
         }),
       })

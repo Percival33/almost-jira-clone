@@ -37,10 +37,10 @@ public class UserService {
         var listiterator = userlist.iterator();
         while (listiterator.hasNext()){
             var currentuser = listiterator.next();
-            if (password.equals(currentuser.password()))
+            if (login.equals(currentuser.login()) && password.equals(currentuser.password()))
                 return currentuser;
         }
-        throw new ResourceNotFoundException("User", "Password", password);
+        throw new ResourceNotFoundException("Wrong", "", login);
     }
 
     public User updateUser(UserForm u, String id) {
@@ -51,6 +51,7 @@ public class UserService {
         User updatedUser = existingUser.toBuilder()
                 .firstName(u.firstName())
                 .lastName(u.lastName())
+                .login(u.login())
                 .password(u.password())
                 .lastModified(now)
                 .build();
@@ -66,6 +67,7 @@ public class UserService {
                         .id(String.valueOf(UUID.randomUUID()))
                         .firstName(u.firstName())
                         .lastName(u.lastName())
+                        .login(u.login())
                         .password(u.password())
                         .projects(null)
                         .createdAt(now)
