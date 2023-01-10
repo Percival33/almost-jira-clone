@@ -32,6 +32,17 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public boolean login(String login, String password) {
+        var userlist = getAllUsers();
+        var listiterator = userlist.iterator();
+        while (listiterator.hasNext()){
+            var currentuser = listiterator.next();
+            if (password.equals(currentuser.password()))
+                return true;
+        }
+        return false;
+    }
+
     public User updateUser(UserForm u, String id) {
         User existingUser = userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User", "Id", id));
