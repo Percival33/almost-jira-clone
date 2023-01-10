@@ -250,7 +250,9 @@ export default {
       fetch(`${API}/projects/${deleteId}`, { method: "DELETE" })
         .then((response) => response.json())
         .then((data) => {
-          this.msg = "Projekt został usunięty";
+          if (data.status === 200) {
+            this.msg = "Projekt został usunięty";
+          }
           if (data.status === 404) {
             this.msg = "Nie można usunąć projektu o nieistniejącym id";
           }
