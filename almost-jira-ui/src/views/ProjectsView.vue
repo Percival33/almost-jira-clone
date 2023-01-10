@@ -91,6 +91,7 @@
       <input
         v-model="newTask"
         type="text"
+        defaultValue=""
         style="width: 400px"
         placeholder="Opis Zadania do dodania"
       />
@@ -333,20 +334,24 @@ export default {
       }
     },
     addTaskToProject(addTaskProjectId, newTask) {
-      newTask = encodeURIComponent(newTask);
-      fetch(`${API}/projects/${addTaskProjectId}/tasks?newTask=${newTask}`, {
-        method: "POST",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          this.msg = "Zadanie zostało dodane";
-          if (data.status === 404) {
-            this.msg = "Nie udało się dodać zadania";
-          }
+      if (newTask === null || newTask === "" || newTask === undefined) {
+        this.msg = "Nie można dodać pustego zadania";
+      } else {
+        newTask = encodeURIComponent(newTask);
+        fetch(`${API}/projects/${addTaskProjectId}/tasks?newTask=${newTask}`, {
+          method: "POST",
         })
-        .catch((error) => {
-          console.log(error);
-        });
+          .then((response) => response.json())
+          .then((data) => {
+            this.msg = "Zadanie zostało dodane";
+            if (data.status === 404) {
+              this.msg = "Nie udało się dodać zadania";
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
     removeTaskFromProject(removeTaskProjectId, taskToRemoveIndex) {
       fetch(
