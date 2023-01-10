@@ -64,8 +64,8 @@ public class UsersController {
     }
 
 
-    @GetMapping{"{login}"}
-    public ResponseEntity<Object> loginattempt(@PathVariable String login, String password){
+    @PutMapping
+    public ResponseEntity<Object> loginattempt(String login, String password){
         try {
             return ResponseHandler.generateResponse("success", HttpStatus.OK, userService.login(login, password));
         } catch (Exception e) {
