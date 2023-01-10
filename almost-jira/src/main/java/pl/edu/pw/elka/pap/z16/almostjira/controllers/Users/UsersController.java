@@ -62,6 +62,16 @@ public class UsersController {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
     }
+
+
+    @GetMapping{"{login}"}
+    public ResponseEntity<Object> loginattempt(@PathVariable String login, String password){
+        try {
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, userService.login(login, password));
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+        }
+}
     // lista uzytkownikow
     // getery i setery dla uzytkownikow o danym loginie
 }

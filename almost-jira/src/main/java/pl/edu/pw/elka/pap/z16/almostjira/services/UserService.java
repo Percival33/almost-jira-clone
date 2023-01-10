@@ -32,15 +32,15 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public boolean login(String login, String password) {
+    public User login(String login, String password) {
         var userlist = getAllUsers();
         var listiterator = userlist.iterator();
         while (listiterator.hasNext()){
             var currentuser = listiterator.next();
             if (password.equals(currentuser.password()))
-                return true;
+                return currentuser;
         }
-        return false;
+        throw new ResourceNotFoundException("User", "Password", password);
     }
 
     public User updateUser(UserForm u, String id) {
