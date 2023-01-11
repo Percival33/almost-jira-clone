@@ -41,7 +41,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  if (to.meta.requiresAuth && checkAuthorization()) {
+  if (to.meta.requiresAuth && !checkAuthorization()) {
     return {
       path: "/login",
       query: { redirect: to.fullPath },
