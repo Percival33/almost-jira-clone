@@ -5,7 +5,7 @@
         Zaloguj się
       </button>
       <input v-model="login" type="text" placeholder="Login" />
-      <input v-model="password" type="text" placeholder="Hasło" />
+      <input v-model="password" type="password" placeholder="Hasło" />
     </div>
     <div v-if="store.state.loggedIn" class="loginstuff">
       <button class="logoutButton" @click="logoutFunction()">

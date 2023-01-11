@@ -73,14 +73,6 @@ public class UsersController {
         }
     }
 
-    @GetMapping("/login")
-    public boolean checkifloggedin() {
-        try {
-            return(userService.checkifloggedin());
-        } catch (Exception e) {
-            return false;
-        }
-    }
     // lista uzytkownikow
     // getery i setery dla uzytkownikow o danym loginie
 }

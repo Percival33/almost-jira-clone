@@ -18,7 +18,6 @@ public class UserService {
     //    TODO: https://www.baeldung.com/mongodb-return-specific-fields
     @Autowired
     UserRepository userRepository;
-    User loggedUser = null;
 
     public User getUserById(String id) {
         return userRepository.findById(id).orElseThrow((() ->
@@ -40,18 +39,10 @@ public class UserService {
         var listiterator = userlist.iterator();
         while (listiterator.hasNext()){
             var currentuser = listiterator.next();
-            if (login.equals(currentuser.login()) && password.equals(currentuser.password())){
-                loggedUser = currentuser;
+            if (login.equals(currentuser.login()) && password.equals(currentuser.password()))
                 return currentuser;
-            }
         }
         throw new ResourceNotFoundException("Matching data", "", login);
-    }
-
-    public boolean checkifloggedin() {
-        if (loggedUser != null)
-            return true;
-        return false;
     }
 
     public User updateUser(UserForm u, String id) {
