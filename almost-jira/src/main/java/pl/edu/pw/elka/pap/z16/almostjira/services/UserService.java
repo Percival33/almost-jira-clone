@@ -40,9 +40,10 @@ public class UserService {
         var listiterator = userlist.iterator();
         while (listiterator.hasNext()){
             var currentuser = listiterator.next();
-            if (login.equals(currentuser.login()) && password.equals(currentuser.password()))
+            if (login.equals(currentuser.login()) && password.equals(currentuser.password())){
                 loggedUser = currentuser;
                 return currentuser;
+            }
         }
         throw new ResourceNotFoundException("Matching data", "", login);
     }

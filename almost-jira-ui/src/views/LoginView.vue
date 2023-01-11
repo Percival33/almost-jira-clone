@@ -34,6 +34,7 @@ export default {
           .then((response) => response.json())
           .then((data) => {
             this.msg = "";
+            window.alert(data.message);
             if (data.message === "success") {
               this.msg = "Logowanie się powiodło";
             } else {
