@@ -1,11 +1,16 @@
 <template>
   <div class="loginView">
-    <div class="loginstuff">
+    <div v-if="!store.state.loggedIn" class="loginstuff">
       <button class="loginButton" @click="loginFunction(login, password)">
         Zaloguj się
       </button>
       <input v-model="login" type="text" placeholder="Login" />
       <input v-model="password" type="text" placeholder="Hasło" />
+    </div>
+    <div v-if="store.state.loggedIn" class="loginstuff">
+      <button class="logoutButton" @click="logoutFunction()">
+        Wyloguj się
+      </button>
     </div>
     <div>
       <p v-if="msg">{{ this.msg }}</p>
@@ -25,6 +30,7 @@ export default {
       showUsers: false,
       singleUser: false,
       msg: "",
+      store,
     };
   },
   methods: {
@@ -51,6 +57,10 @@ export default {
           });
       }
     },
+    logoutFunction() {
+      store.commit("setLoggedIn", false);
+      this.msg = "Zostałeś wylogowany";
+    },
   },
 };
 </script>
@@ -68,6 +78,14 @@ export default {
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
+}
+.logoutButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
 }
 ul {
   border-style: solid;
