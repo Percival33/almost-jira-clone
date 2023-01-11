@@ -365,7 +365,7 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.msg = "Zadanie zostało usunięte";
-          if (data.status === 400) {
+          if (data.status === 404) {
             this.msg = "Nie udało się usunąć zadania";
           }
         })
