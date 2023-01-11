@@ -7,10 +7,14 @@
       <input v-model="login" type="text" placeholder="Login" />
       <input v-model="password" type="text" placeholder="Hasło" />
     </div>
+    <div>
+      <p v-if="msg">{{ this.msg }}</p>
+    </div>
   </div>
 </template>
 
 <script>
+import store from "../store.js";
 const API = "http://localhost:8080";
 
 export default {
@@ -34,11 +38,12 @@ export default {
           .then((response) => response.json())
           .then((data) => {
             this.msg = "";
-            window.alert(data.message);
             if (data.message === "success") {
               this.msg = "Logowanie się powiodło";
+              store.commit("setLoggedIn", true);
             } else {
               this.msg = "Logowanie nieudane";
+              store.commit("setLoggedIn", false);
             }
           })
           .catch((error) => {
