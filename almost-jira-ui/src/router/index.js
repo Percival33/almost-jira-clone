@@ -4,6 +4,7 @@ import AboutView from "../views/AboutView.vue";
 import UsersView from "../views/UsersView.vue";
 import ProjectsView from "@/views/ProjectsView";
 import LoginView from "@/views/LoginView.vue";
+import store from "../store";
 
 const routes = [
   {
@@ -41,7 +42,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  if (to.meta.requiresAuth && !checkAuthorization()) {
+  if (to.meta.requiresAuth && !store.state.loggedIn) {
     return {
       path: "/login",
       query: { redirect: to.fullPath },
@@ -49,15 +50,15 @@ router.beforeEach((to) => {
   }
 });
 
-function checkAuthorization() {
-  fetch("http://localhost:8080/users/login")
-    .then((response) => response.json())
-    .then((data) => {
-      return data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
+// function checkAuthorization() {
+//   fetch("http://localhost:8080/users/login")
+//     .then((response) => response.json())
+//     .then((data) => {
+//       return data;
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
 
 export default router;
