@@ -11,11 +11,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+
+
 @Service
 public class UserService {
     //    TODO: https://www.baeldung.com/mongodb-return-specific-fields
     @Autowired
     UserRepository userRepository;
+    User loggedUser = null;
 
     public User getUserById(String id) {
         return userRepository.findById(id).orElseThrow((() ->
@@ -38,10 +41,16 @@ public class UserService {
         while (listiterator.hasNext()){
             var currentuser = listiterator.next();
             if (login.equals(currentuser.login()) && password.equals(currentuser.password()))
-
+                loggedUser = currentuser;
                 return currentuser;
         }
         throw new ResourceNotFoundException("Matching data", "", login);
+    }
+
+    public boolean checkifloggedin() {
+        if (loggedUser != null)
+            return true;
+        return false;
     }
 
     public User updateUser(UserForm u, String id) {

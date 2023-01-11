@@ -71,7 +71,16 @@ public class UsersController {
         } catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
-}
+    }
+
+    @GetMapping("/login")
+    public boolean checkifloggedin() {
+        try {
+            return(userService.checkifloggedin());
+        } catch (Exception e) {
+            return false;
+        }
+    }
     // lista uzytkownikow
     // getery i setery dla uzytkownikow o danym loginie
 }

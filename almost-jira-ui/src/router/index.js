@@ -50,7 +50,14 @@ router.beforeEach((to) => {
 });
 
 function checkAuthorization() {
-  return true;
+  fetch("http://localhost:8080/users/login")
+    .then((response) => response.json())
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 export default router;
