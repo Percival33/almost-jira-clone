@@ -38,9 +38,10 @@ public class UserService {
         while (listiterator.hasNext()){
             var currentuser = listiterator.next();
             if (login.equals(currentuser.login()) && password.equals(currentuser.password()))
+
                 return currentuser;
         }
-        throw new ResourceNotFoundException("Wrong", "", login);
+        throw new ResourceNotFoundException("Matching data", "", login);
     }
 
     public User updateUser(UserForm u, String id) {
