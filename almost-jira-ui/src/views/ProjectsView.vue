@@ -114,6 +114,32 @@
         placeholder="Numer zadania do usunięcia"
       />
     </div>
+    <div class="editTaskInProject">
+      <button
+        class="editTaskInProjectButton"
+        @click="
+          editTaskInProject(editTaskProjectId, taskToEditIndex, editedTask)
+        "
+      >
+        Edytuj zadanie
+      </button>
+      <input
+        v-model="editTaskProjectId"
+        type="text"
+        placeholder="Id projektu"
+      />
+      <input
+        v-model="taskToEditIndex"
+        type="text"
+        placeholder="Numer zadania do edytowania"
+      />
+      <input
+        v-model="editedTask"
+        type="text"
+        placeholder="Treść zadania"
+        style="width: 400px"
+      />
+    </div>
     <div>
       <p v-if="msg">{{ this.msg }}</p>
     </div>
@@ -170,6 +196,14 @@
   font-size: 18px;
 }
 .removeTaskFromProjectButton {
+  width: 200px;
+  height: 50px;
+  color: black;
+  background: chartreuse;
+  border-color: darkgreen;
+  font-size: 18px;
+}
+.editTaskInProjectButton {
   width: 200px;
   height: 50px;
   color: black;
@@ -372,6 +406,36 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    editTaskInProject(editTaskProjectId, taskToEditIndex, editedTask) {
+      if (
+        editedTask === null ||
+        editedTask === "" ||
+        editedTask === undefined ||
+        taskToEditIndex === undefined ||
+        taskToEditIndex === null ||
+        taskToEditIndex === ""
+      ) {
+        this.msg = "Zadanie ani jego numer nie mogą być puste";
+      } else {
+        editedTask = encodeURIComponent(editedTask);
+        fetch(
+          `${API}/projects/${editTaskProjectId}/tasks?taskIndex=${taskToEditIndex}&modifiedTask=${editedTask}`,
+          {
+            method: "PUT",
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            this.msg = "Zadanie zostało edytowane";
+            if (data.message != "success") {
+              this.msg = "Nie udało się edytować zadania";
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
   },
 };
