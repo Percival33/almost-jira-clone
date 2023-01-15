@@ -235,6 +235,7 @@ li {
 </style>
 
 <script>
+import store from "../store.js";
 const API = "http://localhost:8080";
 
 export default {
@@ -281,7 +282,9 @@ export default {
         });
     },
     deleteProject(deleteId) {
-      fetch(`${API}/projects/${deleteId}`, { method: "DELETE" })
+      fetch(`${API}/projects/${deleteId}?user_id=${store.state.userId}`, {
+        method: "DELETE",
+      })
         .then((response) => response.json())
         .then((data) => {
           if (data.status === 200) {
@@ -347,7 +350,7 @@ export default {
             projectName: changeProjectName,
           });
         }
-        fetch(`${API}/projects/${changeId}`, {
+        fetch(`${API}/projects/${changeId}?user_id=${store.state.userId}`, {
           method: "Put",
           headers: {
             "Content-Type": "application/json",

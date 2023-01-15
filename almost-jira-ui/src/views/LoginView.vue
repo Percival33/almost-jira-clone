@@ -47,9 +47,11 @@ export default {
             if (data.message === "success") {
               this.msg = "Logowanie się powiodło";
               store.commit("setLoggedIn", true);
+              store.commit("setUserId", data.data.id);
             } else {
               this.msg = "Logowanie nieudane";
               store.commit("setLoggedIn", false);
+              store.commit("setUserId", "");
             }
           })
           .catch((error) => {
@@ -59,6 +61,7 @@ export default {
     },
     logoutFunction() {
       store.commit("setLoggedIn", false);
+      store.commit("setUserId", "");
       this.msg = "Zostałeś wylogowany";
     },
   },

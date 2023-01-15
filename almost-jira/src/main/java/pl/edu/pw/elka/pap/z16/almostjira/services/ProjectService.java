@@ -2,6 +2,7 @@ package pl.edu.pw.elka.pap.z16.almostjira.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.edu.pw.elka.pap.z16.almostjira.exceptions.ClientNotAuthorizedException;
 import pl.edu.pw.elka.pap.z16.almostjira.exceptions.ResourceNotFoundException;
 import pl.edu.pw.elka.pap.z16.almostjira.models.Project;
 import pl.edu.pw.elka.pap.z16.almostjira.models.ProjectForm;
@@ -25,15 +26,19 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public void deleteProject(String id) {
+    public void deleteProject(String id, String userId) {
         projectRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Project", "id", id));
-        projectRepository.deleteById(id);
+        if (projectRepository.findById(id).get().overseerId().equals(userId))
+            projectRepository.deleteById(id);
+        else throw(new ClientNotAuthorizedException());
     }
 
-    public Project updateProject(ProjectForm p, String id) {
+    public Project updateProject(ProjectForm p, String id, String userId) {
         Project existingProject = projectRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Project", "Id", id));
+        if (!projectRepository.findById(id).get().overseerId().equals(userId))
+            throw(new ClientNotAuthorizedException());
 
         Date now = new Date();
         Project updatedProject = existingProject.toBuilder()

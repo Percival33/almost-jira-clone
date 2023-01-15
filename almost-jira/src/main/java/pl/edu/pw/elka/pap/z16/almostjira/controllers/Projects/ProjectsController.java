@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pw.elka.pap.z16.almostjira.exceptions.ClientNotAuthorizedException;
 import pl.edu.pw.elka.pap.z16.almostjira.models.Project;
 import pl.edu.pw.elka.pap.z16.almostjira.models.UserForm;
 import pl.edu.pw.elka.pap.z16.almostjira.services.ProjectService;
@@ -36,11 +37,13 @@ public class ProjectsController {
         }
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteProject(@PathVariable("id") String project_id){
+    public ResponseEntity<Object> deleteProject(@PathVariable("id") String project_id, String user_id){
         try {
-            projectService.deleteProject(project_id);
+            projectService.deleteProject(project_id, user_id);
             return ResponseHandler.generateResponse("success", HttpStatus.OK, "Project deleted successfully!");
         } catch (Exception e) {
+            if (e.getClass().getSimpleName().equals(ClientNotAuthorizedException.getName()))
+                return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.UNAUTHORIZED, null);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
     }
@@ -65,10 +68,12 @@ public class ProjectsController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateProject(@PathVariable("id") String project_id, @RequestBody ProjectForm p){
+    public ResponseEntity<Object> updateProject(@PathVariable("id") String project_id, String user_id, @RequestBody ProjectForm p){
         try {
-            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProject(p, project_id));
+            return ResponseHandler.generateResponse("success", HttpStatus.OK, projectService.updateProject(p, project_id, user_id));
         } catch (Exception e) {
+            if (e.getClass().getSimpleName().equals(ClientNotAuthorizedException.getName()))
+                    return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.UNAUTHORIZED, null);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
     }
