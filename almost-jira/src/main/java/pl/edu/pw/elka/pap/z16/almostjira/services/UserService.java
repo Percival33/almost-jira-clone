@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pap.z16.almostjira.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pl.edu.pw.elka.pap.z16.almostjira.exceptions.LoginAlreadyInUseException;
 import pl.edu.pw.elka.pap.z16.almostjira.exceptions.ResourceNotFoundException;
 import pl.edu.pw.elka.pap.z16.almostjira.models.*;
 import pl.edu.pw.elka.pap.z16.almostjira.repositories.UserRepository;
@@ -51,29 +52,46 @@ public class UserService {
 
         Date now = new Date();
         User updatedUser = existingUser.toBuilder()
-                .firstName(u.firstName())
-                .lastName(u.lastName())
-                .login(u.login())
-                .password(u.password())
+                .firstName((u.firstName() == null) ? existingUser.firstName() : u.firstName())
+                .lastName((u.lastName() == null) ? existingUser.lastName() : u.lastName())
+                .login((u.login() == null) ? existingUser.login() : u.login())
+                .password((u.password() == null) ? existingUser.password() : u.password())
                 .lastModified(now)
                 .build();
 
+        var userlist = getAllUsers();
+        var listiterator = userlist.iterator();
+        while (listiterator.hasNext()) {
+            var currentUser = listiterator.next();
+            if (currentUser.login().equals(updatedUser.login()))
+                if (!currentUser.id().equals(updatedUser.id()))
+                    throw(new LoginAlreadyInUseException());
+        }
         return userRepository.save(updatedUser);
     }
 
     public User createUser(UserForm u) {
         Date now = new Date();
-        // TODO: hash password
-        return userRepository.save(
-                User.builder()
-                        .id(String.valueOf(UUID.randomUUID()))
-                        .firstName(u.firstName())
-                        .lastName(u.lastName())
-                        .login(u.login())
-                        .password(u.password())
-                        .projects(null)
-                        .createdAt(now)
-                        .lastModified(now)
-                        .build());
+
+
+        var newUser = User.builder()
+                .id(String.valueOf(UUID.randomUUID()))
+                .firstName(u.firstName())
+                .lastName(u.lastName())
+                .login(u.login())
+                .password(u.password())
+                .projects(null)
+                .createdAt(now)
+                .lastModified(now)
+                .build();
+
+        var userlist = getAllUsers();
+        var listiterator = userlist.iterator();
+        while (listiterator.hasNext()) {
+            if (listiterator.next().login().equals(newUser.login()))
+                throw(new LoginAlreadyInUseException());
+        }
+
+        return userRepository.save(newUser);
     }
 }

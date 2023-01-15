@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pw.elka.pap.z16.almostjira.exceptions.ClientNotAuthorizedException;
+import pl.edu.pw.elka.pap.z16.almostjira.exceptions.LoginAlreadyInUseException;
 import pl.edu.pw.elka.pap.z16.almostjira.models.UserForm;
 import pl.edu.pw.elka.pap.z16.almostjira.services.UserService;
 import pl.edu.pw.elka.pap.z16.almostjira.utils.ResponseHandler;
@@ -22,6 +24,8 @@ public class UsersController {
         try {
             return ResponseHandler.generateResponse("success", HttpStatus.CREATED, userService.createUser(newUser));
         } catch (Exception e) {
+            if (e.getClass().getSimpleName().equals(LoginAlreadyInUseException.getName()))
+                return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, null);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
     }
@@ -31,6 +35,8 @@ public class UsersController {
         try {
             return ResponseHandler.generateResponse("success", HttpStatus.OK, userService.updateUser(u, user_id));
         } catch (Exception e) {
+            if (e.getClass().getSimpleName().equals(LoginAlreadyInUseException.getName()))
+                return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, null);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
         }
     }
