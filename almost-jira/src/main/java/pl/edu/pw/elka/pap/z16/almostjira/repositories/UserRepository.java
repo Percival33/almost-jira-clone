@@ -11,6 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
-    @Query(fields="{ 'password':  0}")
+    //@Query(fields="{ 'password':  0}")
     Optional<User> findById(String firstname);
 }
