@@ -1,13 +1,20 @@
 <template>
-  <nav>
-    <router-link to="/">Projekt Almost Jira</router-link> |
-    <!-- <router-link to="/about">About</router-link> | -->
-    <router-link to="/users">Użytkownicy</router-link> |
-    <router-link to="/projects">Projekty</router-link> |
-    <router-link to="/login">Logowanie</router-link>
-  </nav>
-  <router-view />
-  <notifications />
+  <div>
+    <div>
+      <img alt="Almost Jira logo and text" src="../src/assets/logoinapis.png" />
+    </div>
+    <div>
+      <nav>
+        <router-link to="/">Projekt Almost Jira</router-link> |
+        <!-- <router-link to="/about">About</router-link> | -->
+        <router-link to="/users">Użytkownicy</router-link> |
+        <router-link to="/projects">Projekty</router-link> |
+        <router-link to="/login">Logowanie</router-link>
+      </nav>
+      <router-view />
+      <notifications />
+    </div>
+  </div>
 </template>
 
 <style lang="scss">
@@ -27,7 +34,7 @@ nav {
     color: #2c3e50;
 
     &.router-link-exact-active {
-      color: #42b983;
+      color: #6a4aff;
     }
   }
 }
