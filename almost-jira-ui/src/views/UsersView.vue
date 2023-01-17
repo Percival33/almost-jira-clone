@@ -1,52 +1,104 @@
 <template>
   <div class="usersView">
     <div class="users">
-      <button class="getUsersButton" @click="toggleUsers">
+      <button class="button" @click="toggleUsers">
         {{ showUsers ? "Ukryj użytkowników" : "Pokaż użytkowników" }}
       </button>
-      <ul v-if="showUsers">
-        <li v-for="user in results" :key="user.id">
-          <p>ID: {{ user.id }}</p>
-          <p>Imię: {{ user.firstName }}</p>
-          <p>Nazwisko: {{ user.lastName }}</p>
+      <ul class="list" v-if="showUsers">
+        <li class="list" v-for="user in results" :key="user.id">
+          <article>
+            <header>
+              <h3>
+                <kbd
+                  role="button"
+                  @click="copyToClipboard(user.id)"
+                  class="secondary"
+                >
+                  {{ user.id }}
+                </kbd>
+              </h3>
+            </header>
+            <p>
+              Imię i Nazwisko:
+              <strong style="text-transform: capitalize">
+                {{ user.firstName }}
+              </strong>
+              &nbsp;
+              <strong style="text-transform: capitalize">
+                {{ user.lastName }}
+              </strong>
+            </p>
+            <ul v-if="user" class="list">
+              <li
+                class="list"
+                v-for="project in user.projects"
+                :key="project.id"
+              >
+                <p>Nazwa projektu: project.projectName</p>
+              </li>
+            </ul>
+            <footer>
+              <p>Data dodania: {{ user.createdAt }}</p>
+              <p>Data ostatniej edycji: {{ user.lastModified }}</p>
+            </footer>
+          </article>
         </li>
       </ul>
     </div>
-    <div class="singleUser">
-      <button class="getUserButton" @click="getUser(Id)">
-        Pokaż użytkownika
-      </button>
+    <details>
+      <summary>Pokaż szczegóły o użytkowniku</summary>
       <input v-model="Id" type="text" placeholder="Podaj ID użytkownika" />
-      <p v-if="singleUser">
-        ID: {{ singleUser.id }}<br />
-        Imię: {{ singleUser.firstName }}<br />
-        Nazwisko: {{ singleUser.lastName }}<br />
-        Data dodania: {{ singleUser.createdAt }}<br />
-        Data ostatniej edycji: {{ singleUser.lastModified }}
-      </p>
-      <ul v-if="singleUser">
-        <li v-for="project in singleUser.projects" :key="project.id">
-          <p>Nazwa projektu: project.projectName</p>
-        </li>
-      </ul>
-    </div>
-    <div class="deleteUser">
-      <button class="deleteUserButton" @click="deleteUser(deleteId)">
-        Usuń użytkownika
-      </button>
+      <button class="button" @click="getUser(Id)">Pokaż użytkownika</button>
+      <article v-if="singleUser">
+        <header>
+          <h3>
+            <kbd
+              role="button"
+              @click="copyToClipboard(singleUser.id)"
+              class="secondary"
+            >
+              {{ singleUser.id }}
+            </kbd>
+          </h3>
+        </header>
+        <p>
+          Imię i Nazwisko:
+          <strong style="text-transform: capitalize">
+            {{ singleUser.firstName }}
+          </strong>
+          &nbsp;
+          <strong style="text-transform: capitalize">
+            {{ singleUser.lastName }}
+          </strong>
+        </p>
+        <ul v-if="singleUser" class="list">
+          <li
+            class="list"
+            v-for="project in singleUser.projects"
+            :key="project.id"
+          >
+            <p>Nazwa projektu: project.projectName</p>
+          </li>
+        </ul>
+        <footer>
+          <p>Data dodania: {{ singleUser.createdAt }}</p>
+          <p>Data ostatniej edycji: {{ singleUser.lastModified }}</p>
+        </footer>
+      </article>
+    </details>
+    <details>
+      <summary>Usuń użytkownika</summary>
       <input
         v-model="deleteId"
         type="text"
         placeholder="Podaj ID użytkownika do usunięcia"
       />
-    </div>
-    <div class="addUser">
-      <button
-        class="addUserButton"
-        @click="addUser(firstName, lastName, login, password)"
-      >
-        Dodaj Użytkownika
+      <button class="button" @click="deleteUser(deleteId)">
+        Usuń użytkownika
       </button>
+    </details>
+    <details>
+      <summary>Utwórz nowego użytkownika</summary>
       <input v-model="firstName" type="text" placeholder="Imie użytkownika" />
       <input
         v-model="lastName"
@@ -55,16 +107,15 @@
       />
       <input v-model="login" type="text" placeholder="Login uzytkownika" />
       <input v-model="password" type="text" placeholder="Hasło użytkownika" />
-    </div>
-    <div class="changeUser">
       <button
-        class="addUserButton"
-        @click="
-          changeUser(changeId, newFirstName, newLastName, newLogin, newPassword)
-        "
+        class="button"
+        @click="addUser(firstName, lastName, login, password)"
       >
-        Edytuj Użytkownika
+        Dodaj Użytkownika
       </button>
+    </details>
+    <details>
+      <summary>Zmień dane użytkownika</summary>
       <input
         v-model="changeId"
         type="text"
@@ -74,72 +125,29 @@
       <input v-model="newLastName" type="text" placeholder="Nowe nazwisko" />
       <input v-model="newLogin" type="text" placeholder="Nowy login" />
       <input v-model="newPassword" type="text" placeholder="Nowe hasło" />
-    </div>
-    <div>
-      <p v-if="msg">{{ this.msg }}</p>
-    </div>
+      <button
+        class="button"
+        @click="
+          changeUser(changeId, newFirstName, newLastName, newLogin, newPassword)
+        "
+      >
+        Edytuj Użytkownika
+      </button>
+    </details>
   </div>
 </template>
 
 <style>
-.getUsersButton {
-  width: 200px;
-  height: 50px;
+.button {
   color: black;
   background: chartreuse;
   border-color: darkgreen;
-  font-size: 18px;
 }
-.getUserButton {
-  width: 200px;
-  height: 50px;
-  color: black;
-  background: chartreuse;
-  border-color: darkgreen;
-  font-size: 18px;
-}
-.deleteUserButton {
-  width: 200px;
-  height: 50px;
-  color: black;
-  background: chartreuse;
-  border-color: darkgreen;
-  font-size: 18px;
-}
-.addUserButton {
-  width: 200px;
-  height: 50px;
-  color: black;
-  background: chartreuse;
-  border-color: darkgreen;
-  font-size: 18px;
-}
-.usersView {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-ul {
-  border-style: solid;
-  border-width: 3px;
-  border-color: darkgreen;
-  padding: 5px;
-  background: lightgreen;
-}
-li {
-  color: black;
-  list-style: none;
-  padding: 5px;
-  border-bottom-color: black;
-  border-bottom-width: 3px;
-  border-bottom-style: solid;
-}
-input {
-  border-style: solid;
-  border-width: 3px;
-  border-color: darkgreen;
-  padding: 5px;
-  background: lightgreen;
+.list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  /* border-bottom: 0; */
 }
 </style>
 
@@ -154,6 +162,8 @@ export default {
       showUsers: false,
       singleUser: false,
       msg: "",
+      title: "",
+      type: "",
     };
   },
   methods: {
@@ -177,11 +187,20 @@ export default {
       fetch(`${API}/users/${Id}`)
         .then((response) => response.json())
         .then((data) => {
-          this.msg = "";
           if (Id === "" || data.data === null) {
-            this.msg = "Nie ma użytkownika o takim id";
+            this.type = "error";
+            this.title = "Błąd!";
+            this.text = "Nie ma użytkownika o takim id";
           }
           this.singleUser = data.data;
+        })
+        .then(() => {
+          this.$notify({
+            type: this.type,
+            title: this.title,
+            text: this.msg,
+            duration: 1000 * 3,
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -191,14 +210,30 @@ export default {
       fetch(`${API}/users/${deleteId}`, { method: "DELETE" })
         .then((response) => response.json())
         .then((data) => {
-          this.msg = "Użytkownik został usunięty";
           if (data.status === 404) {
-            this.msg = "Nie można usunąć użytkownika o nieistniejącym id";
+            this.type = "error";
+            this.title = "Błąd!";
+            this.text = "Nie można usunąć użytkownika o nieistniejącym id";
+          } else {
+            this.type = "success";
+            this.title = "Sukces!";
+            this.text = "Użytkownik został usunięty";
           }
+        })
+        .then(() => {
+          this.$notify({
+            type: this.type,
+            title: this.title,
+            text: this.msg,
+            duration: 1000 * 3,
+          });
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    copyToClipboard(text) {
+      navigator.clipboard.writeText(text);
     },
     addUser(firstName, lastName, login, password) {
       if (
@@ -223,12 +258,23 @@ export default {
         })
           .then((response) => response.json())
           .then((data) => {
-            this.msg = "";
             if (data.message === "success") {
-              this.msg = "Użytkownik został dodany";
+              this.type = "success";
+              this.title = "Sukces!";
+              this.text = "Użytkownik został dodany";
             } else {
-              this.msg = "Nie udało się dodać użytkownika";
+              this.type = "error";
+              this.title = "Wystąpił błąd!";
+              this.text = "Nie udało się dodać użytkownika";
             }
+          })
+          .then(() => {
+            this.$notify({
+              type: this.type,
+              title: this.title,
+              text: this.msg,
+              duration: 1000 * 3,
+            });
           })
           .catch((error) => {
             console.log(error);
@@ -250,13 +296,24 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          this.msg = "";
           if (data.message === "success") {
-            this.msg = "Użytkownik został edytowany";
+            this.type = "success";
+            this.title = "Sukces!";
+            this.text = "Użytkownik został edytowany";
           } else {
-            this.msg =
+            this.type = "error";
+            this.title = "Wystąpił błąd!";
+            this.text =
               "Nie udało się edytować użytkownika. Sprawdź poprawność Id";
           }
+        })
+        .then(() => {
+          this.$notify({
+            type: this.type,
+            title: this.title,
+            text: this.msg,
+            duration: 1000 * 3,
+          });
         })
         .catch((error) => {
           console.log(error);

@@ -7,9 +7,19 @@
       <div v-if="showProjects">
         <li class="list" v-for="project in results" :key="project.id">
           <article>
-            <header>{{ project.projectName }}</header>
-            <p>Body</p>
-            <p>Właściciel: {{ project.overseerId }}</p>
+            <header>
+              <h3>{{ project.projectName }}</h3>
+            </header>
+            <p>
+              Właściciel:
+              <kbd
+                role="button"
+                class="secondary"
+                @click="copyToClipboard(project.overseerId)"
+              >
+                {{ project.overseerId }}
+              </kbd>
+            </p>
             <ul v-if="!project.tasks.isEmpty" class="list">
               <li
                 class="list"
@@ -19,7 +29,16 @@
                 <p class="list">Zadanie {{ index + 1 }}: {{ task }}</p>
               </li>
             </ul>
-            <footer>ID: {{ project.id }}</footer>
+            <footer>
+              ID:
+              <kbd
+                role="button"
+                class="secondary"
+                @click="copyToClipboard(project.id)"
+              >
+                {{ project.id }}
+              </kbd>
+            </footer>
           </article>
         </li>
       </div>
@@ -28,19 +47,40 @@
       <summary>Sprawdź projekt</summary>
       <input v-model="Id" type="text" placeholder="Podaj id projektu" />
       <button class="button" @click="getProject(Id)">Pokaż projekt</button>
-      <p v-if="singleProject">
-        ID: {{ singleProject.id }}<br />
-        Nazwa: {{ singleProject.projectName }}<br />
-        Właściciel: {{ singleProject.overseerId }}<br />
-        Data dodania: {{ singleProject.createdAt }}<br />
-        Data ostatniej edycji: {{ singleProject.lastModified }}
-      </p>
-      <ul v-if="singleProject">
-        <h4>Zadania</h4>
-        <li v-for="(task, index) in singleProject.tasks" :key="index">
-          <p>Zadanie {{ index + 1 }}: {{ task }}</p>
-        </li>
-      </ul>
+      <article v-if="singleProject">
+        <header>
+          <h3>{{ singleProject.projectName }}</h3>
+        </header>
+        <p>
+          Właściciel:
+          <kbd
+            class="secondary"
+            role="button"
+            @click="copyToClipboard(singleProject.overseerId)"
+          >
+            {{ singleProject.overseerId }}
+          </kbd>
+        </p>
+        <ul v-if="!singleProject.tasks.isEmpty" class="list">
+          <li
+            class="list"
+            v-for="(task, index) in singleProject.tasks"
+            :key="index"
+          >
+            <p class="list">Zadanie {{ index + 1 }}: {{ task }}</p>
+          </li>
+        </ul>
+        <footer>
+          ID:
+          <kbd
+            role="button"
+            class="secondary"
+            @click="copyToClipboard(singleProject.id)"
+          >
+            {{ singleProject.id }}
+          </kbd>
+        </footer>
+      </article>
     </details>
     <details>
       <summary>Usuń projekt</summary>
@@ -149,9 +189,6 @@
         Edytuj zadanie
       </button>
     </details>
-    <div>
-      <p v-if="msg">{{ this.msg }}</p>
-    </div>
   </div>
 </template>
 
@@ -167,22 +204,9 @@
   padding: 0;
   /* border-bottom: 0; */
 }
-/* ul {
-  border-style: solid;
-  border-width: 3px;
-  border-color: darkgreen;
-  padding: 5px;
-  background: lightgreen;
-} */
-
-/* li {
-  color: black;
-  list-style: none;
-  padding: 5px;
-  border-bottom-color: black;
-  border-bottom-width: 3px;
-  border-bottom-style: solid;
-} */
+.alert {
+  background-color: #2196f3;
+}
 </style>
 
 <script>
@@ -197,6 +221,8 @@ export default {
       showProjects: false,
       singleProject: false,
       msg: "",
+      title: "",
+      type: "",
       changeProjectBody: null,
     };
   },
@@ -222,11 +248,20 @@ export default {
       fetch(`${API}/projects/${Id}`)
         .then((response) => response.json())
         .then((data) => {
-          this.msg = "";
           this.singleProject = data.data;
           if (Id === "" || data.data === null) {
+            this.type = "error";
+            this.title = "Wystąpił błąd!";
             this.msg = "Nie ma projektu o takim id";
           }
+        })
+        .then(() => {
+          this.$notify({
+            type: this.type,
+            title: this.title,
+            text: this.msg,
+            duration: 1000 * 3,
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -238,12 +273,26 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
+          this.msg = "";
+          this.type = "success";
+          this.title = "Sukces!";
+
           if (data.status === 200) {
             this.msg = "Projekt został usunięty";
           }
           if (data.status === 404) {
             this.msg = "Nie można usunąć projektu o nieistniejącym id";
+            this.type = "error";
+            this.title = "Wystąpił błąd!";
           }
+        })
+        .then(() => {
+          this.$notify({
+            type: this.type,
+            title: this.title,
+            text: this.msg,
+            duration: 1000 * 3,
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -255,8 +304,13 @@ export default {
       } else {
         firstTask = [firstTask];
       }
+      this.msg = "";
+      this.title = "";
+      this.type = "";
       if (overseerId == null || projectName == null) {
         this.msg = "Aby dodać projekt podaj nazwę i właściciela";
+        this.type = "warn";
+        this.title = "Podaj poprawne dane!";
       } else {
         fetch(`${API}/projects`, {
           method: "Post",
@@ -271,21 +325,40 @@ export default {
         })
           .then((response) => response.json())
           .then((data) => {
-            this.msg = "";
             if (data.message === "success") {
               this.msg = "Projekt został dodany";
+              this.type = "success";
+              this.title = "Suckes!";
             } else {
               this.msg = "Nie udało się dodać projektu";
+              this.type = "error";
+              this.title = "Wystąpił błąd!";
             }
+          })
+          .then(() => {
+            this.$notify({
+              type: this.type,
+              title: this.title,
+              text: this.msg,
+              duration: 1000 * 3,
+            });
           })
           .catch((error) => {
             console.log(error);
           });
       }
     },
+    copyToClipboard(text) {
+      navigator.clipboard.writeText(text);
+    },
     changeProject(changeId, changeOverseerId, changeProjectName) {
+      this.title = "";
+      this.type = "";
+      this.msg = "";
       if (changeOverseerId == null && changeProjectName == null) {
         this.msg = "Podaj wartość w polu które chcesz zedytować";
+        this.type = "warn";
+        this.title = "Podaj poprane dane!";
       } else {
         if (changeOverseerId == null) {
           this.changeProjectBody = JSON.stringify({
@@ -310,22 +383,44 @@ export default {
         })
           .then((response) => response.json())
           .then((data) => {
-            this.msg = "";
-            if (data.message === "success") {
+            if (data.data === null) {
+              this.msg = "Tylko właściciel projektu może go edytować!";
+              this.type = "error";
+              this.title = "Wystąpił błąd!";
+            } else if (data.message === "success") {
               this.msg = "Projekt został edytowany";
+              this.type = "success";
+              this.title = "Suckes!";
             } else {
               this.msg =
                 "Nie udało się edytować projektu. Sprawdź poprawność Id";
+              this.type = "error";
+              this.title = "Wystąpił błąd!";
             }
+          })
+          .then(() => {
+            this.$notify({
+              type: this.type,
+              title: this.title,
+              text: this.msg,
+              duration: 1000 * 3,
+            });
           })
           .catch((error) => {
             console.log(error);
+            console.log("czy rzuca error");
           });
       }
+      // console.log("sprawdzenie: ", this.msg);
     },
     addTaskToProject(addTaskProjectId, newTask) {
+      this.msg = "";
+      this.title = "";
+      this.type = "";
       if (newTask === null || newTask === "" || newTask === undefined) {
         this.msg = "Nie można dodać pustego zadania";
+        this.type = "warn";
+        this.title = "Podaj poprane dane!";
       } else {
         newTask = encodeURIComponent(newTask);
         fetch(`${API}/projects/${addTaskProjectId}/tasks?newTask=${newTask}`, {
@@ -334,9 +429,21 @@ export default {
           .then((response) => response.json())
           .then((data) => {
             this.msg = "Zadanie zostało dodane";
+            this.type = "success";
+            this.title = "Suckes!";
             if (data.status === 404) {
               this.msg = "Nie udało się dodać zadania";
+              this.type = "error";
+              this.title = "Wystąpił błąd!";
             }
+          })
+          .then(() => {
+            this.$notify({
+              type: this.type,
+              title: this.title,
+              text: this.msg,
+              duration: 1000 * 3,
+            });
           })
           .catch((error) => {
             console.log(error);
@@ -344,6 +451,9 @@ export default {
       }
     },
     removeTaskFromProject(removeTaskProjectId, taskToRemoveIndex) {
+      this.msg = "";
+      this.title = "";
+      this.type = "";
       fetch(
         `${API}/projects/${removeTaskProjectId}/tasks?taskIndex=${taskToRemoveIndex}`,
         {
@@ -353,15 +463,30 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.msg = "Zadanie zostało usunięte";
+          this.type = "success";
+          this.title = "Sukces!";
           if (data.status === 404) {
             this.msg = "Nie udało się usunąć zadania";
+            this.type = "error";
+            this.title = "Wystąpił błąd!";
           }
+        })
+        .then(() => {
+          this.$notify({
+            type: this.type,
+            title: this.title,
+            text: this.msg,
+            duration: 1000 * 3,
+          });
         })
         .catch((error) => {
           console.log(error);
         });
     },
     editTaskInProject(editTaskProjectId, taskToEditIndex, editedTask) {
+      this.msg = "";
+      this.title = "";
+      this.type = "";
       if (
         editedTask === null ||
         editedTask === "" ||
@@ -371,6 +496,8 @@ export default {
         taskToEditIndex === ""
       ) {
         this.msg = "Zadanie ani jego numer nie mogą być puste";
+        this.type = "warn";
+        this.title = "Podaj poprawne dane!";
       } else {
         editedTask = encodeURIComponent(editedTask);
         fetch(
@@ -382,9 +509,21 @@ export default {
           .then((response) => response.json())
           .then((data) => {
             this.msg = "Zadanie zostało edytowane";
+            this.type = "success";
+            this.title = "Sukces!";
             if (data.message != "success") {
               this.msg = "Nie udało się edytować zadania";
+              this.type = "error";
+              this.title = "Wystąpił błąd!";
             }
+          })
+          .then(() => {
+            this.$notify({
+              type: this.type,
+              title: this.title,
+              text: this.msg,
+              duration: 1000 * 3,
+            });
           })
           .catch((error) => {
             console.log(error);

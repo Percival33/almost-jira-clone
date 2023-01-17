@@ -1,20 +1,24 @@
 <template>
   <div class="loginView">
-    <div v-if="!store.state.loggedIn" class="loginstuff">
-      <button class="loginButton" @click="loginFunction(login, password)">
-        Zaloguj się
-      </button>
+    <from v-if="!store.state.loggedIn" class="loginstuff">
       <input v-model="login" type="text" placeholder="Login" />
       <input v-model="password" type="password" placeholder="Hasło" />
-    </div>
-    <div v-if="store.state.loggedIn" class="loginstuff">
-      <button class="logoutButton" @click="logoutFunction()">
-        Wyloguj się
+      <button class="button" @click="loginFunction(login, password)">
+        Zaloguj się
       </button>
+    </from>
+    <div v-if="store.state.loggedIn" class="loginstuff">
+      <button class="button" @click="logoutFunction()">Wyloguj się</button>
     </div>
-    <div>
-      <p v-if="msg">{{ this.msg }}</p>
-    </div>
+    <article class="alert" v-if="msg">
+      {{ this.msg }}
+      <span
+        class="closebtn"
+        onclick="this.parentElement.style.display='none';this.msg=undefined;"
+      >
+        &times;
+      </span>
+    </article>
   </div>
 </template>
 
@@ -45,7 +49,7 @@ export default {
           .then((data) => {
             this.msg = "";
             if (data.message === "success") {
-              this.msg = "Logowanie się powiodło";
+              this.msg = "Zalogowano!";
               store.commit("setLoggedIn", true);
               store.commit("setUserId", data.data.id);
             } else {
@@ -69,47 +73,18 @@ export default {
 </script>
 
 <style>
-.loginButton {
-  width: 200px;
-  height: 50px;
+.button {
   color: black;
   background: chartreuse;
   border-color: darkgreen;
-  font-size: 18px;
 }
-.loginView {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
+.list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  /* border-bottom: 0; */
 }
-.logoutButton {
-  width: 200px;
-  height: 50px;
-  color: black;
-  background: chartreuse;
-  border-color: darkgreen;
-  font-size: 18px;
-}
-ul {
-  border-style: solid;
-  border-width: 3px;
-  border-color: darkgreen;
-  padding: 5px;
-  background: lightgreen;
-}
-li {
-  color: black;
-  list-style: none;
-  padding: 5px;
-  border-bottom-color: black;
-  border-bottom-width: 3px;
-  border-bottom-style: solid;
-}
-input {
-  border-style: solid;
-  border-width: 3px;
-  border-color: darkgreen;
-  padding: 5px;
-  background: lightgreen;
+.alert {
+  background-color: #2196f3;
 }
 </style>
