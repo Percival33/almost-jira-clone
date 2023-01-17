@@ -1,27 +1,33 @@
 <template>
   <div class="projectsView">
     <div class="projects">
-      <button class="getProjectsButton" @click="toggleProjects">
-        {{ showProjects ? "Ukryj projekty" : "Pokaż projekty" }}
+      <button class="button" @click="toggleProjects">
+        {{ showProjects ? "Ukryj projekty" : "Pokaż wszystkie projekty" }}
       </button>
-      <ul v-if="showProjects">
-        <li v-for="project in results" :key="project.id">
-          <p>ID: {{ project.id }}</p>
-          <p>Nazwa: {{ project.projectName }}</p>
-          <p>Właściciel: {{ project.overseerId }}</p>
-          <ul v-if="!project.tasks.isEmpty">
-            <li v-for="(task, index) in project.tasks" :key="index">
-              <p>Zadanie {{ index + 1 }}: {{ task }}</p>
-            </li>
-          </ul>
+      <div v-if="showProjects">
+        <li class="list" v-for="project in results" :key="project.id">
+          <article>
+            <header>{{ project.projectName }}</header>
+            <p>Body</p>
+            <p>Właściciel: {{ project.overseerId }}</p>
+            <ul v-if="!project.tasks.isEmpty" class="list">
+              <li
+                class="list"
+                v-for="(task, index) in project.tasks"
+                :key="index"
+              >
+                <p class="list">Zadanie {{ index + 1 }}: {{ task }}</p>
+              </li>
+            </ul>
+            <footer>ID: {{ project.id }}</footer>
+          </article>
         </li>
-      </ul>
+      </div>
     </div>
-    <div class="singleProject">
-      <button class="getProjectButton" @click="getProject(Id)">
-        Pokaż projekt
-      </button>
+    <details>
+      <summary>Sprawdź projekt</summary>
       <input v-model="Id" type="text" placeholder="Podaj id projektu" />
+      <button class="button" @click="getProject(Id)">Pokaż projekt</button>
       <p v-if="singleProject">
         ID: {{ singleProject.id }}<br />
         Nazwa: {{ singleProject.projectName }}<br />
@@ -35,35 +41,33 @@
           <p>Zadanie {{ index + 1 }}: {{ task }}</p>
         </li>
       </ul>
-    </div>
-    <div class="deleteProject">
-      <button class="deleteProjectButton" @click="deleteProject(deleteId)">
-        Usuń projekt
-      </button>
+    </details>
+    <details>
+      <summary>Usuń projekt</summary>
       <input
         v-model="deleteId"
         type="text"
         placeholder="Podaj ID projektu do usunięcia"
       />
-    </div>
-    <div class="addProject">
+      <button class="button" @click="deleteProject(deleteId)">
+        Usuń projekt
+      </button>
+    </details>
+    <details>
+      <summary>Dodaj nowy projekt</summary>
+      <input v-model="overseerId" type="text" placeholder="Id właściciela" />
+      <input v-model="projectName" type="text" placeholder="Nazwa projektu" />
+      <input v-model="firstTask" type="text" placeholder="Pierwsze zadanie" />
       <button
-        class="addProjectButton"
+        class="button"
         @click="addProject(overseerId, projectName, firstTask)"
       >
         Dodaj Projekt
       </button>
-      <input v-model="overseerId" type="text" placeholder="Id właściciela" />
-      <input v-model="projectName" type="text" placeholder="Nazwa projektu" />
-      <input v-model="firstTask" type="text" placeholder="Pierwsze zadanie" />
-    </div>
-    <div class="changeProject">
-      <button
-        class="changeProjectButton"
-        @click="changeProject(changeId, changeOverseerId, changeProjectName)"
-      >
-        Edytuj Projekt
-      </button>
+    </details>
+    <!-- <div class="changeProject"> -->
+    <details>
+      <summary>Edytuj projekt</summary>
       <input
         v-model="changeId"
         type="text"
@@ -79,30 +83,32 @@
         type="text"
         placeholder="Nowa nazwa projektu"
       />
-    </div>
-    <div class="addTaskToProject">
       <button
-        class="addTaskToProjectButton"
-        @click="addTaskToProject(addTaskProjectId, newTask)"
+        class="button"
+        @click="changeProject(changeId, changeOverseerId, changeProjectName)"
       >
-        Dodaj Zadanie
+        Edytuj Projekt
       </button>
+    </details>
+    <!-- </div> -->
+    <details>
+      <summary>Dodaj zadanie do projektu</summary>
       <input v-model="addTaskProjectId" type="text" placeholder="Id projektu" />
       <input
         v-model="newTask"
         type="text"
         defaultValue=""
-        style="width: 400px"
         placeholder="Opis Zadania do dodania"
       />
-    </div>
-    <div class="removeTaskFromProject">
       <button
-        class="removeTaskFromProjectButton"
-        @click="removeTaskFromProject(removeTaskProjectId, taskToRemoveIndex)"
+        class="button"
+        @click="addTaskToProject(addTaskProjectId, newTask)"
       >
-        Usuń zadanie
+        Dodaj Zadanie
       </button>
+    </details>
+    <details>
+      <summary>Usuń zadanie z projektu</summary>
       <input
         v-model="removeTaskProjectId"
         type="text"
@@ -113,16 +119,16 @@
         type="text"
         placeholder="Numer zadania do usunięcia"
       />
-    </div>
-    <div class="editTaskInProject">
       <button
-        class="editTaskInProjectButton"
-        @click="
-          editTaskInProject(editTaskProjectId, taskToEditIndex, editedTask)
-        "
+        class="button"
+        @click="removeTaskFromProject(removeTaskProjectId, taskToRemoveIndex)"
       >
-        Edytuj zadanie
+        Usuń zadanie
       </button>
+    </details>
+    <details>
+      <!-- TODO: add option class -->
+      <summary>Edytuj zadanie w projekcie</summary>
       <input
         v-model="editTaskProjectId"
         type="text"
@@ -133,13 +139,16 @@
         type="text"
         placeholder="Numer zadania do edytowania"
       />
-      <input
-        v-model="editedTask"
-        type="text"
-        placeholder="Treść zadania"
-        style="width: 400px"
-      />
-    </div>
+      <input v-model="editedTask" type="text" placeholder="Treść zadania" />
+      <button
+        class="button"
+        @click="
+          editTaskInProject(editTaskProjectId, taskToEditIndex, editedTask)
+        "
+      >
+        Edytuj zadanie
+      </button>
+    </details>
     <div>
       <p v-if="msg">{{ this.msg }}</p>
     </div>
@@ -147,91 +156,33 @@
 </template>
 
 <style>
-.getProjectsButton {
-  width: 200px;
-  height: 50px;
+.button {
   color: black;
   background: chartreuse;
   border-color: darkgreen;
-  font-size: 18px;
 }
-.getProjectButton {
-  width: 200px;
-  height: 50px;
-  color: black;
-  background: chartreuse;
-  border-color: darkgreen;
-  font-size: 18px;
+.list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  /* border-bottom: 0; */
 }
-.deleteProjectButton {
-  width: 200px;
-  height: 50px;
-  color: black;
-  background: chartreuse;
-  border-color: darkgreen;
-  font-size: 18px;
-}
-.addProjectButton {
-  width: 200px;
-  height: 50px;
-  color: black;
-  background: chartreuse;
-  border-color: darkgreen;
-  font-size: 18px;
-}
-.changeProjectButton {
-  width: 200px;
-  height: 50px;
-  color: black;
-  background: chartreuse;
-  border-color: darkgreen;
-  font-size: 18px;
-}
-.addTaskToProjectButton {
-  width: 200px;
-  height: 50px;
-  color: black;
-  background: chartreuse;
-  border-color: darkgreen;
-  font-size: 18px;
-}
-.removeTaskFromProjectButton {
-  width: 200px;
-  height: 50px;
-  color: black;
-  background: chartreuse;
-  border-color: darkgreen;
-  font-size: 18px;
-}
-.editTaskInProjectButton {
-  width: 200px;
-  height: 50px;
-  color: black;
-  background: chartreuse;
-  border-color: darkgreen;
-  font-size: 18px;
-}
-ul {
+/* ul {
   border-style: solid;
   border-width: 3px;
   border-color: darkgreen;
   padding: 5px;
   background: lightgreen;
-}
+} */
 
-li {
+/* li {
   color: black;
   list-style: none;
   padding: 5px;
   border-bottom-color: black;
   border-bottom-width: 3px;
   border-bottom-style: solid;
-}
-.projectsView {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
+} */
 </style>
 
 <script>
