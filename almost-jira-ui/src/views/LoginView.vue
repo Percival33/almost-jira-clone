@@ -1,19 +1,14 @@
 <template>
   <div class="loginView">
-    <div v-if="!store.state.loggedIn" class="loginstuff">
-      <button class="loginButton" @click="loginFunction(login, password)">
-        Zaloguj się
-      </button>
+    <from v-if="!store.state.loggedIn" class="loginstuff">
       <input v-model="login" type="text" placeholder="Login" />
       <input v-model="password" type="password" placeholder="Hasło" />
-    </div>
-    <div v-if="store.state.loggedIn" class="loginstuff">
-      <button class="logoutButton" @click="logoutFunction()">
-        Wyloguj się
+      <button class="button" @click="loginFunction(login, password)">
+        Zaloguj się
       </button>
-    </div>
-    <div>
-      <p v-if="msg">{{ this.msg }}</p>
+    </from>
+    <div v-if="store.state.loggedIn" class="loginstuff">
+      <button class="button" @click="logoutFunction()">Wyloguj się</button>
     </div>
   </div>
 </template>
@@ -30,6 +25,8 @@ export default {
       showUsers: false,
       singleUser: false,
       msg: "",
+      title: "",
+      type: "",
       store,
     };
   },
@@ -45,14 +42,26 @@ export default {
           .then((data) => {
             this.msg = "";
             if (data.message === "success") {
-              this.msg = "Logowanie się powiodło";
+              this.msg = "Zalogowano!";
+              this.type = "success";
+              this.title = "Sukces!";
               store.commit("setLoggedIn", true);
               store.commit("setUserId", data.data.id);
             } else {
               this.msg = "Logowanie nieudane";
+              this.type = "error";
+              this.title = "Wystąpił błąd!";
               store.commit("setLoggedIn", false);
               store.commit("setUserId", "");
             }
+          })
+          .then(() => {
+            this.$notify({
+              type: this.type,
+              title: this.title,
+              text: this.msg,
+              duration: 1000 * 3,
+            });
           })
           .catch((error) => {
             console.log(error);
@@ -63,53 +72,30 @@ export default {
       store.commit("setLoggedIn", false);
       store.commit("setUserId", "");
       this.msg = "Zostałeś wylogowany";
+      this.$notify({
+        type: "info",
+        title: "Wylogowano pomyślnie",
+        text: this.msg,
+        duration: 1000 * 3,
+      });
     },
   },
 };
 </script>
 
 <style>
-.loginButton {
-  width: 200px;
-  height: 50px;
+.button {
   color: black;
   background: chartreuse;
   border-color: darkgreen;
-  font-size: 18px;
 }
-.loginView {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
+.list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  /* border-bottom: 0; */
 }
-.logoutButton {
-  width: 200px;
-  height: 50px;
-  color: black;
-  background: chartreuse;
-  border-color: darkgreen;
-  font-size: 18px;
-}
-ul {
-  border-style: solid;
-  border-width: 3px;
-  border-color: darkgreen;
-  padding: 5px;
-  background: lightgreen;
-}
-li {
-  color: black;
-  list-style: none;
-  padding: 5px;
-  border-bottom-color: black;
-  border-bottom-width: 3px;
-  border-bottom-style: solid;
-}
-input {
-  border-style: solid;
-  border-width: 3px;
-  border-color: darkgreen;
-  padding: 5px;
-  background: lightgreen;
+.alert {
+  background-color: #2196f3;
 }
 </style>
