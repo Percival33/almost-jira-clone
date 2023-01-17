@@ -1,12 +1,13 @@
 # PAP22-Z16
 
-## Table of Contents
+## Spis treści
 
-1. [członkowie zespołu](##Lista-członków-zespołu)
-2. [zadanie](#Treść-zadania)
-3. [aktualny stan rozwiązania](#Aktualny-poziom-zaawansowania-rozwiazania)
+1. [Członkowie zespołu](##Lista-członków-zespołu)
+2. [Zadanie](#Treść-zadania)
+3. [Aktualny stan rozwiązania](#Aktualny-poziom-zaawansowania-rozwiazania)
 4. [Konteneryzacja i uruchomienie](#Konteneryzacja)
 5. [Baza danych](#baza-danych)
+6. [Style CSS](#style-css)
 
 ## Lista członków zespołu:
 
@@ -82,9 +83,14 @@ docker run -d --name almost-jira-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERN
 
 ## Baza danych
 
-Aplikacja wykorzystuje bazę danych mongodb, która jest hostowana a zewnetrznym serwisie `MongoDBCloud`
+Aplikacja wykorzystuje bazę danych mongodb, która jest hostowana a zewnetrznym serwisie [MongoDBCloud].
+
+### Style CSS 
+Style css pochodzą głównie z biblioteki css [Pico], niektóre z nich zostały przystosowane do naszych potrzeb.
 
 [//]: # "/home/percival/.jdks/temurin-17.0.5/bin/java  -jar /home/percival/src/pap22z-z16/almost-jira/build/libs/almost-jira-0.0.1-SNAPSHOT-plain.jar"
 [//]: # "link"
 [dokumentacja api]: http://localhost:8080/swagger-ui/index.html
 [aplikacja]: http://localhost:5000
+[pico]: https://picocss.com/
+[MongoDBCloud]: https://www.mongodb.com/atlas
