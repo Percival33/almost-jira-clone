@@ -279,9 +279,13 @@ export default {
 
           if (data.status === 200) {
             this.msg = "Projekt został usunięty";
-          }
-          if (data.status === 404) {
+          } else if (data.status === 404) {
             this.msg = "Nie można usunąć projektu o nieistniejącym id";
+            this.type = "error";
+            this.title = "Wystąpił błąd!";
+          } else if (data.status === 401) {
+            this.msg =
+              "Można usuwać tylko projekty, których jest się właścicielem";
             this.type = "error";
             this.title = "Wystąpił błąd!";
           }

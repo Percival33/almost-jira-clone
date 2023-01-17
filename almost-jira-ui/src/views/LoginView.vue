@@ -10,15 +10,6 @@
     <div v-if="store.state.loggedIn" class="loginstuff">
       <button class="button" @click="logoutFunction()">Wyloguj się</button>
     </div>
-    <article class="alert" v-if="msg">
-      {{ this.msg }}
-      <span
-        class="closebtn"
-        onclick="this.parentElement.style.display='none';this.msg=undefined;"
-      >
-        &times;
-      </span>
-    </article>
   </div>
 </template>
 
@@ -34,6 +25,8 @@ export default {
       showUsers: false,
       singleUser: false,
       msg: "",
+      title: "",
+      type: "",
       store,
     };
   },
@@ -50,13 +43,25 @@ export default {
             this.msg = "";
             if (data.message === "success") {
               this.msg = "Zalogowano!";
+              this.type = "success";
+              this.title = "Sukces!";
               store.commit("setLoggedIn", true);
               store.commit("setUserId", data.data.id);
             } else {
               this.msg = "Logowanie nieudane";
+              this.type = "error";
+              this.title = "Wystąpił błąd!";
               store.commit("setLoggedIn", false);
               store.commit("setUserId", "");
             }
+          })
+          .then(() => {
+            this.$notify({
+              type: this.type,
+              title: this.title,
+              text: this.msg,
+              duration: 1000 * 3,
+            });
           })
           .catch((error) => {
             console.log(error);
@@ -67,6 +72,12 @@ export default {
       store.commit("setLoggedIn", false);
       store.commit("setUserId", "");
       this.msg = "Zostałeś wylogowany";
+      this.$notify({
+        type: "info",
+        title: "Wylogowano pomyślnie",
+        text: this.msg,
+        duration: 1000 * 3,
+      });
     },
   },
 };
