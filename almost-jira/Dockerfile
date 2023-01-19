@@ -4,7 +4,8 @@ WORKDIR /home/gradle/src
 RUN gradle assemble
 
 
-FROM openjdk:17.0.1-jdk-slim
+#FROM openjdk:17.0.1-jdk-slim
+FROM eclipse-temurin:17-jre-alpine
 
 EXPOSE 8080
 

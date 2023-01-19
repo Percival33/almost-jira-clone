@@ -12,4 +12,4 @@ services:
     build: ./almost-jira-ui/.
     container_name: almost-jira-ui
     ports:
-      - 5000:8080
+      - 20305:8080
