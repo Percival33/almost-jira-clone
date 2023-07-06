@@ -11,12 +11,10 @@
 
 ## Lista członków zespołu:
 
-<ul>
-    <li>Marcin Jarczewski</li>
-    <li>Franciszek Malewski</li>
-    <li>Jakub Jóźwiak</li>
-    <li>Michał Ładyżyński</li>
-</ul>
+- [Marcin Jarczewski](https://github.com/Percival33)
+- [Franciszek Malewski](https://github.com/FranciszekMalewski)
+- [Jakub Jóźwiak](https://github.com/jjozwiak113)
+- [Michał Ładyżyński]
 
 ## Treść zadania:
 
